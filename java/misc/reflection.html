@@ -1,0 +1,579 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+<title>VPF::Java reflection - Форум программистов</title> 
+<meta http-equiv="content-type" content="text/html; charset=utf-8" /> 
+<meta name="description" content="VPF:: - Форум программистов Vingrad" />
+<meta name="keywords" content="VPF:: - Форум программистов Vingrad, программирование" />
+<meta name="title" content="VPF:: - Форум программистов Vingrad" />
+<link rel='stylesheet' type='text/css' href='/css/global/menu.css' />
+<link rel='stylesheet' type='text/css' href='/css/global/other.css' />
+<link rel='stylesheet' type='text/css' href='/css/global/rating.css' />
+<link rel='stylesheet' type='text/css' href='/css/global/reklame.css' />
+<link rel='stylesheet' type='text/css' href='/css/green/main.css' />
+<script type='text/javascript' src='/lang/ru/locale.js'></script>
+<script type='text/javascript' src='/tmp/time1202145537.js'></script>
+<script type='text/javascript' src='/html/scriptaculous/prototype.js'></script>
+<script type='text/javascript' src='/html/scriptaculous/scriptaculous.js'></script>
+<script type='text/javascript' src='/html/syntax_script/includer.js'></script>
+</head> 
+<body>
+<div class="minwidth">
+<div class="layout">
+<div class="container">
+<span style="display: none;" id="ajax_w"><b>Загрузка. Пожалуйста,<br />подождите...</b><br /><br /><img src="/style_images/2/l_ajax.gif" alt=""/></span><script  type="text/javascript">
+<!--
+function buddy_pop() { window.open('index.php?act=buddy&s=','BrowserBuddy','width=250,height=500,resizable=yes,scrollbars=yes'); }
+function chat_pop(cw,ch)  { window.open('index.php?s=&act=chat&pop=1','Chat','width='+cw+',height='+ch+',resizable=yes,scrollbars=yes'); }
+function multi_page_jump( url_bit, total_posts, per_page, ajax_s, ajax_e )
+{
+pages = 1; cur_st = parseInt("0"); cur_page  = 1;
+if ( total_posts % per_page == 0 ) { pages = total_posts / per_page; }
+else { pages = Math.ceil( total_posts / per_page ); }
+msg = "Введите номер страницы, к которой хотите перейти." + " " + pages;
+if ( cur_st> 0 ) { cur_page = cur_st / per_page; cur_page = cur_page -1; }
+show_page = 1;
+if ( cur_page <pages )  { show_page = cur_page + 1; }
+if ( cur_page>= pages ) { show_page = cur_page - 1; }
+else { show_page = cur_page + 1; }
+userPage = prompt( msg, show_page );
+if ( userPage > 0  ) {
+if ( userPage <1 )     {    userPage = 1;  }
+if ( userPage> pages ) { userPage = pages; }
+if ( userPage == 1 )    {     start = 0;    }
+else { start = (userPage - 1) * per_page; }
+if ((typeof(ajax_s)=='string')&&(typeof(ajax_e)=='string')&&(ajax_s!='')&&(ajax_e!=''))
+{var r_1 = new RegExp('\%22','g'),
+r_2 = new RegExp('\%27','g'),
+ajax = ajax_s+start+ajax_e;
+ajax = ajax.replace(r_1, "\"");
+eval(ajax.replace(r_2, "'"));
+} else
+{var r = new RegExp('(\/index)?\.html\&st=([0-9]+)\s*$','i'),
+s = "";
+s = url_bit+"&st=" + start;
+window.location = s.replace(r, "/$2.html");
+}
+}
+}
+//-->
+</script>
+<div class="div_fullwidth">
+<table cellspacing='0' id='bnr' summary='table0'>
+<tr>
+<td align="left">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#3,0,0,0" width="330" height="60">
+<param name="SRC" value="/r/vacancy_330x60_maket.swf" />
+<embed src="/r/vacancy_330x60_maket.swf" pluginspage="http://www.macromedia.com/shockwave/download/" type="application/x-shockwave-flash" width="330" height="60"></embed>
+</object>        			
+</td>
+<td align="right">
+<a href="http://forum.vingrad.ru/openads/adclick.php?bannerid=66&amp;zoneid=49&amp;source=&amp;dest=http%3A%2F%2Fwww.luxoft.com%2Fgo.php%3Fc%3D4%26p%3D4%26b%3D6" target="_blank"><img src="http://forum.vingrad.ru/reklama/luxsoft_banner_unix.gif" width="468" height="60" alt="Работа программистам!" title="Работа программистам!" border="0" /></a><div id="beacon_66" style="position: absolute; left: 0px; top: 0px; visibility: hidden;"><img src="http://forum.vingrad.ru/openads/adlog.php?bannerid=66&amp;clientid=17&amp;zoneid=49&amp;source=&amp;block=0&amp;capping=0&amp;cb=2614a8bacb484db5c91e87aff3c5d17d" width="0" height="0" alt="" style="width: 0px; height: 0px;" /></div>
+</td>
+</tr>
+</table>
+<table cellspacing='0' id='menu0' summary='table1'>
+<tr>
+<td align="left">
+<span class="nobr">
+Здравствуйте, Гость (
+<a href="http://forum.vingrad.ru/act-Login/CODE-00.html">Вход</a> | 
+<a href="http://forum.vingrad.ru/act-Reg/CODE-00.html">Регистрация</a> |  
+<a href="http://forum.vingrad.ru/act-Help/CODE-01/HID-1.html">Что даёт регистрация на форуме&#063;</a> 
+)
+</span>
+</td>
+<td align="right">
+<span class="nobr"><a href="http://forum.vingrad.ru/act-Reg/CODE-10.html">Восстановить пароль</a></span> |  
+<span class="nobr"><a href="http://forum.vingrad.ru/act-Reg/CODE/reval/index.html">Выслать повторно письмо для активации</a></span>
+</td>
+</tr>
+</table>
+<div id="devnews">Новости для программистов подгружаются..</div>
+</div> 
+<div class="div_cutwidth">
+<table cellspacing='0' summary='table2'>
+<tr>
+<td id="menu1">
+<div>
+<img src="/style_images/2/menu/menu_faq.gif" usemap="#map1" alt="" /><br />
+<map name="map1" id="map1">
+<area shape="rect" coords="431,21,479,64" href="http://forum.vingrad.ru/act-boardrules.html" alt="Правила" />
+<area shape="rect" coords="491,21,531,64" href="http://forum.vingrad.ru/act-Help.html" alt="Помощь" />
+<area shape="rect" coords="542,23,587,64" href="http://forum.vingrad.ru/act-rep/CODE/totals/index.html" alt="Рейтинг" />
+<area shape="rect" coords="598,23,640,65" href="http://forum.vingrad.ru/act-fav.html" alt="Избранное" />
+<area shape="rect" coords="649,22,693,61" href="http://forum.vingrad.ru/act-Search/f-104.html" alt="Поиск" />
+<area shape="rect" coords="708,19,752,58" href="http://forum.vingrad.ru/act-Members.html" alt="Участники" />
+<area shape="rect" coords="369,65,557,129" href="http://forum.vingrad.ru" alt="На главную" />
+<area shape="rect" coords="6,129,51,179" href="http://devnews.ru" target="_blank" alt="Новости" id="nav_news" />
+<area shape="rect" coords="58,129,100,183" href="http://forum.vingrad.ru/forum/java-general.html" alt="Форум" id="nav_forum" />
+<area shape="rect" coords="111,130,153,181" href="http://forum.vingrad.ru/articles/java-general.html" alt="Статьи" id="nav_articles" />
+<area shape="rect" coords="164,130,205,180" href="http://forum.vingrad.ru/faq/java-general.html" alt="FAQ" id="nav_faq" />
+<area shape="rect" coords="162,72,207,124" href="http://forum.vingrad.ru/sources/java-general.html" alt="Исходники" id="nav_sources" />
+<area shape="rect" coords="213,71,258,124" href="http://forum.vingrad.ru/books/java-general.html" alt="Книги" id="nav_books" />
+<area shape="rect" coords="266,72,309,125" href="http://forum.vingrad.ru/requests/index.html" alt="Запросы" />
+<area shape="rect" coords="317,72,361,126" href="http://wiki.vingrad.ru" alt="Вики" />
+</map>
+</div>
+<span id="txt_map">
+<span id="noimg_heading"><a href="http://forum.vingrad.ru/act-idx.html">Форум программистов Vingrad</a></span><br /><br />
+<span id="noimg_menu1_1"><a href="http://devnews.ru">Новости</a> &middot;
+<a href="http://forum.vingrad.ru/requests/index.html">Запросы</a> &middot;
+<a href="http://wiki.vingrad.ru">Wiki</a> &middot;
+<a href="#">FAQ</a></span><br /><br />
+<span id="noimg_menu1_2"><a href="http://forum.vingrad.ru/act-boardrules.html">Правила</a> &middot;
+<a href="http://forum.vingrad.ru/act-Help.html">Помощь</a> &middot;
+<a href="http://forum.vingrad.ru/act-rep/CODE/totals/index.html">Рейтинг</a> &middot;
+<a href="http://forum.vingrad.ru/act-fav.html">Избранное</a> &middot;
+<a href="http://forum.vingrad.ru/act-Search/f-104.html">Поиск</a> &middot;
+<a href="http://forum.vingrad.ru/act-Members.html">Участники</a></span>
+</span>
+</td>
+</tr>
+</table>
+<div id="reklama_top_left">
+<a href="http://allsoft.ru/ads/re.php?id=6898" target="_blank"><img src="/r/codegear.gif" alt="codegear" /></a>
+</div>
+<div id="rekl_header_right">
+<a href="http://sun.ru/techdays" target="_blank"><img src="/r/std_370x50.gif" alt="sun techdays" /></a>
+</div>
+<div id="nav">
+<a href='http://forum.vingrad.ru/faq/act-idx.html'>FAQ</a>&nbsp;-&gt;&nbsp;<a href='http://forum.vingrad.ru/faq/act-SC/c-1.html'>Программирование</a>&nbsp;-&gt;&nbsp;<a href='http://forum.vingrad.ru/faq/java-forum.html'>Java</a>&nbsp;-&gt;&nbsp;<a href='http://forum.vingrad.ru/faq/java-general.html'>Java: Общие вопросы</a><script type="text/javascript">
+var menu_this_level=new Array();
+menu_this_level[0]='<a href="http://forum.vingrad.ru/faq/java-tools.html">Java tools &amp; IDE&#39;s<\/a>';
+menu_this_level[1]='<a href="http://forum.vingrad.ru/faq/java-j2ee.html">J2EE<\/a>';
+menu_this_level[2]='<a href="http://forum.vingrad.ru/faq/java-j2me.html">J2ME<\/a>';
+menu_this_level[3]='<a href="http://forum.vingrad.ru/faq/SOA-BPM.html">SOA &amp; BPM<\/a>';
+menu_this_level[4]='<a href="http://forum.vingrad.ru/faq/java-applet.html">Java: Апплеты<\/a>';
+menu_this_level[5]='<a href="http://forum.vingrad.ru/faq/java-gui-swing-swt.html">Java: GUI приложения<\/a>';
+menu_this_level[6]='<a href="http://forum.vingrad.ru/faq/java-network.html">Java: Работа с сетью<\/a>';
+menu_this_level[7]='<a href="http://forum.vingrad.ru/faq/forum-485.html">Java Card<\/a>';
+</script>                                                
+<span onclick="return clickreturnvalue()" onmouseover="dropdownmenu(this, event, menu_this_level, '350px', 350)" onmouseout="delayhidemenu()">(еще)</span></div>
+<script type="text/javascript">
+<!--
+function link_to_post(pid)
+{
+temp = prompt( "Копирование прямой ссылки этой темы, для сохранения ссылки в буфере обмена Вашего компьютера", "http://forum.vingrad.ru"+"/index.php?showtopic=157972&view=findpost&p=" + pid );
+return false;
+}
+function PopUp(url, name, width,height,center,resize,scroll,posleft,postop) {
+if (posleft != 0) { x = posleft }
+if (postop  != 0) { y = postop  }
+if (!scroll) { scroll = 1 }
+if (!resize) { resize = 1 }
+if ((parseInt (navigator.appVersion)>= 4 ) && (center)) {
+X = (screen.width  - width ) / 2;
+Y = (screen.height - height) / 2;
+}
+if (scroll != 0) { scroll = 1 }
+var Win = window.open( url, name, 'width='+width+',height='+height+',top='+Y+',left='+X+',resizable='+resize+',scrollbars='+scroll+',location=no,directories=no,status=no,menubar=no,toolbar=no');
+}
+function ShowHide(id1, id2) {
+if (id1 != '') expMenu(id1);
+if (id2 != '') expMenu(id2);
+}
+function expMenu(id) {
+var itm = null;
+if (document.getElementById) {
+itm = document.getElementById(id);
+} else if (document.all){
+itm = document.all[id];
+} else if (document.layers){
+itm = document.layers[id];
+}
+if (!itm) {
+// do nothing
+}
+else if (itm.style) {
+if (itm.style.display == "none") { itm.style.display = ""; }
+else { itm.style.display = "none"; }
+}
+else { itm.visibility = "show"; }
+}
+//-->
+</script>
+<a name="top"></a>
+<table cellspacing='0' summary='table3'>
+<tr>
+<td class="leftalign">
+Модераторы: <a href="http://vingrad.ru/@LSD">LSD</a>, <a href="http://vingrad.ru/@powerOn">powerOn</a>, <a href="http://vingrad.ru/@tux">tux</a>, <a href="http://vingrad.ru/@javastic">javastic</a><br />        
+<a name="go_p"></a>
+<div id="s_pages_1" style="display:inline">&nbsp;&nbsp;<br /></div>
+</td>
+<td class="rightalign_ch1">
+<form action="http://forum.vingrad.ru/index.php?" method="post" name="search"><p class="inline_p">
+<input type="hidden" name="forums" value="104" />
+<input type="hidden" name="show_type" value="faq" />
+<input type="hidden" name="cat_forum" value="forum_id" />
+<input type="hidden" name="act" value="Search" />
+<input type="hidden" name="joinname" value="1" />
+<input type="hidden" name="CODE" value="01" />
+<span>Поиск: </span><input type="text" size="20" name="keywords" class="forminput" value="Введите слово"
+onfocus="if (this.value == 'Введите слово') this.value = '';"
+onblur="if (this.value == '') this.value = 'Введите слово';" /><input
+type="submit" value="Go" class="forminput" /></p>
+</form>
+</td>
+<td class="rightalign_ch3">
+<a href="http://forum.vingrad.ru/faq/act-Post/CODE-00/f-104/syntax-java.html" title="Создание новой темы"><img src="/style_images/2/t_new_material.gif" border="0"  alt="Добавить материал" title="Добавить материал" />
+</a>
+</td>
+</tr>
+</table><div id='edit_title' style='display:inline'>&nbsp;</div><br />
+<div align="center">
+<div style="border: 0px solid rgb(153, 153, 153); width: 800px;">
+<table cellspacing='1' class='table_articles' summary='table4'>
+<tr class="header_articles">
+<td class="header_articles">
+<div align="center" style="color:#000000;">
+Java reflection
+</div>
+</td>
+</tr>
+</table>    
+<div id="p_all" style="display: inline;">        
+<table cellspacing='1' class='table_articles' summary='table5'>
+<tr class="topic_info_articles">
+<td class="topic_info_articles" style="width: 300px;">
+<table border='0' summary='table6'>
+<tr>
+<td style="width: 100px;">
+<img src='http://forum.vingrad.ru/uploads/av-4437.jpg' border='0' width='65' height='80' alt='' />
+</td>
+<td align="left">
+<a name="entry1162735" href="#" onclick="ubbc_addAfterQuote('[B]Domestic&nbsp;Cat[/B], '); return false;" title="Вставить ник в поле ввода">Domestic&nbsp;Cat</a> 
+<br />
+Репутация: 49  <br />Всего: 170<br /><br />
+<a href='http://vingrad.ru/@Domestic%20Cat'>Профиль</a><br />
+</td>				
+</tr>
+</table>
+</td>
+<td valign="top" align="right">
+<table border='0' style='height: 100px;' summary='table7'>
+<tr>
+<td align="right" style="vertical-align:top;">
+<img src="/style_images/2/none.gif" class="imgsep" alt="" />
+<img src="/style_images/2/none.gif" class="imgsep" alt="" />
+<img src="/style_images/2/none.gif" class="imgsep" alt="" />
+<img src="/style_images/2/none.gif" class="imgsep" alt="" />
+<a href="javascript:void(0);" onmouseover="InsertQuote.prepare();return true;" onclick="InsertQuote('Domestic&nbsp;Cat', '1.6.2005,  10:50', 1162735);"><img src="/style_images/2/p_quick_quote-off.gif" alt="Быстрая цитата " class="preload4" title="Скопировать выделение в поле ввода" /></a>
+<img src="/style_images/2/none.gif" class="imgsep" alt="" />
+<a href="http://forum.vingrad.ru/act-Post/CODE-06/f-104/t-157972/p-1162735.html"><img src="/style_images/2/p_quote-off.gif" border="0"  alt="Цитата " class="preload5" title="Ответить в тему с цитированием участника" /></a>
+</td>
+</tr>        	
+<tr>
+<td align="left" style="vertical-align:top;">
+<div id="debug"></div>
+<b>Теги:</b>
+<span id="tags_field"></span>
+<div id="ajax_tag_load"></div>
+</td>
+</tr>
+<tr>
+<td align="right" style="vertical-align: bottom;">
+<input id="tag" name="tag" size="20" type="text" value="" />
+<input type="button" name="submit" value="Добавить тег" onclick="insert_new_tag('104', '157972', document.getElementById('tag').value); document.getElementById('tag').value='';" />
+<div class="auto_complete" id="tag_auto_complete"></div>
+<script type="text/javascript">var tagid=getId('tag');tagid.autocomplete='off';new Ajax.Autocompleter('tag', 'tag_auto_complete', '/ajax/get_tags.php', {})</script> 	
+</td>
+</tr>
+</table>
+</td>
+</tr>      
+</table>
+<table cellspacing='1' class='block_articles post'  id='d1162735' summary='table8'>
+<tr>
+<td class="block_articles post" id="post1162735" onmouseup="post_mup(1162735);" onmousedown="post_mdown(1162735);">
+<div class="postcolor">Reflection - это механизм, позволяющий динамически загружать и создавать экземпляры класса, а также осуществлять доступ к полям и методам класса. Для выполнения этих операций через reflection используется объект, имеющий тип Class. Этот объект содержит полную информацию, описывающую структуру класса - конструкторы, методы, поля и т.д. Объект типа Class создается автоматически Java-машиной для каждого класса, загруженного загрузчиком классов.<br /><br />Для получения объекта типа Class можно воспользоваться одним из следующих способов:<br /><div class='postcolor'><table class='code' cellspacing='0' summary='table9'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_NTE2MT'><br /><br />Class clazz = Integer.class;<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_NTE2MT','java');</script><br /><br />или<br /><br /><div class='postcolor'><table class='code' cellspacing='0' summary='table10'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_JhMzc2'><br />Integer number = new Integer&#40;&#34;362&#34;&#41;;<br />Class clazz = number.getClass&#40;&#41;;<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_JhMzc2','java');</script><br /><b><br />Получение информации о классе</b><br /><br />В случае, если структура класса неизвестна, необходимо получить информацию о том, какие конструкторы, методы и поля содержит класс.<br /><br /><div class='postcolor'><table class='code' cellspacing='0' summary='table11'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_NjZiOW'><br />public interface IPoint<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public int getX&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;public int getY&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;public String getName&#40;&#41;;<br />}<br /><br />public class Point implements IPoint<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public final static String DEFAULT_NAME =&nbsp;&#34;Point&#34;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public static int MAX_X_VALUE = 700;<br />&nbsp;&nbsp;&nbsp;&nbsp;public static int MAX_Y_VALUE = 500;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private int x;<br />&nbsp;&nbsp;&nbsp;&nbsp;private int y;<br />&nbsp;&nbsp;&nbsp;&nbsp;private String name;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public int getX&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this.x;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private void setX&#40;int x&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.x = x;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public int getY&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this.y;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private void setY&#40;int y&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.y = y;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public String getName&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this.name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;protected void setName&#40;String name&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private Point&#40;int x, int y&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.x = x;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.y = y;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public Point&#40;int x, int y, String name&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this&#40;x, y&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class Main<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class clazz = Point.class;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Class&#58;&#34;&nbsp;+ clazz.getName&#40;&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.print&#40;&#34;&#092;nSuperclass&#58;&nbsp;&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class superClass = clazz.getSuperclass&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;superClass.getName&#40;&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;&#092;nAll implemented interfaces&#58;&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class&#91;&#93;&nbsp;interfaces = clazz.getInterfaces&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&#40;int interfaceIndex = 0;&nbsp;interfaceIndex&nbsp;&#60;&nbsp;interfaces.length;&nbsp;interfaceIndex++&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;interfaces&#91;interfaceIndex&#93;.getName&#40;&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;&#092;nAll declared constructors of Point class&#58;&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructor&#91;&#93;&nbsp;constructors = clazz.getDeclaredConstructors&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&#40;int constructorIndex = 0;&nbsp;constructorIndex&nbsp;&#60;&nbsp;constructors.length;&nbsp;constructorIndex++&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;constructors&#91;constructorIndex&#93;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;&#092;nAll declared methods of Point class&#58;&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&#91;&#93;&nbsp;methods = clazz.getDeclaredMethods&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&#40;int methodIndex = 0;&nbsp;methodIndex&nbsp;&#60;&nbsp;methods.length;&nbsp;methodIndex++&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;methods&#91;methodIndex&#93;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;&#092;nAll declared fields of Point class&#58;&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field&#91;&#93;&nbsp;fields = clazz.getDeclaredFields&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&#40;int fieldIndex = 0;&nbsp;fieldIndex&nbsp;&#60;&nbsp;fields.length;&nbsp;fieldIndex++&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;fields&#91;fieldIndex&#93;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_NjZiOW','java');</script><br /><br />В примере для получения конструкторов, методов и полей класса используются методы getDeclaredConstructors(), getDeclaredMethods(), getDeclaredFields(). Но, наряду с этими методами, объект типа Class имеет также методы getConstructors(), getMethods(), getFields(). В чем их отличие? Отличаются они тем, что методы getDeclaredXXX() возвращают элементы, объявленные в текущем классе (в том числе элементы, имеющие модификаторы доступа protected и private), а методы getConstructors(), getMethods(), getFields() возвращают все public элементы текущего и родительских классов.<br /><br />Часто полученной информации о структуре класса недостаточно, и возникает вопрос, как узнать модификаторы, которые имеют элементы класса. Для этих целей существует метод getModifiers() и класс Modifier с набором статических методов, позволяющих проверить наличие интересующего нас модификатора.<br /><div class='postcolor'><table class='code' cellspacing='0' summary='table12'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_mYTkxO'><br /><br />public final class Something<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public transient String variable;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public synchronized String getVariable&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this.variable;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;protected Something&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.variable =&nbsp;&#34;var&#34;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class Main<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throws NoSuchFieldException, NoSuchMethodException<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class clazz = Something.class;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int clazzModifiers = clazz.getModifiers&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Class is final&#58;&nbsp;&#34;&nbsp;+Modifier.isFinal&#40;clazzModifiers&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructor constructor = clazz.getDeclaredConstructor&#40;null&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int constructorModifiers = constructor.getModifiers&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Constructor is protected&#58;&nbsp;&#34;&nbsp;+Modifier.isProtected&#40;constructorModifiers&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field field = clazz.getField&#40;&#34;variable&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int fieldModifiers = field.getModifiers&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Field is transient&#58;&nbsp;&#34;&nbsp;+Modifier.isTransient&#40;fieldModifiers&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method method = clazz.getMethod&#40;&#34;getVariable&#34;, null&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int methodModifiers = method.getModifiers&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Method is synchronized&#58;&nbsp;&#34;&nbsp;+Modifier.isSynchronized&#40;methodModifiers&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_mYTkxO','java');</script><br /><br /><b>Создание экземпляров класса. Вызов методов. Доступ к полям.</b><br /><br />В этом разделе мы рассмотрим, как с помощью механизма reflection можно создавать экземпляры класса, вызывать методы и осуществлять доступ к полям.<br /><br /><div class='postcolor'><table class='code' cellspacing='0' summary='table13'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_wODk3M'><br />public class Something<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static String STATIC_VARIABLE;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public String hello;<br />&nbsp;&nbsp;&nbsp;&nbsp;public String world;<br />&nbsp;&nbsp;&nbsp;&nbsp;public boolean toLowerCase;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public String printHello&#40;String secondWord&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String result = this.hello +&nbsp;&#34;&nbsp;&#34;&nbsp;+ secondWord;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this.toLowerCase ? result.toLowerCase&#40;&#41;&nbsp;&#58;&nbsp;result;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public static String concatenate&#40;String first, int second, Double third&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return first +&nbsp;&#34;&nbsp;&#34;&nbsp;+ second +&nbsp;&#34;&nbsp;&#34;&nbsp;+ third;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public Something&#40;String hello, String world, boolean toLowerCase&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.hello = hello;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.world = world;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.toLowerCase = toLowerCase;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class Main<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throws NoSuchFieldException, IllegalAccessException,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NoSuchMethodException, InvocationTargetException, InstantiationException<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class clazz = Something.class;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field staticVariable = clazz.getField&#40;&#34;STATIC_VARIABLE&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;staticVariable.set&#40;null,&nbsp;&#34;Static Variable&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;staticVariable.getName&#40;&#41;&nbsp;+&nbsp;&#34;&#58;&nbsp;&#34;&nbsp;+ staticVariable.get&#40;null&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class&#91;&#93;&nbsp;staticMethodArgsTypes = {String.class, int.class, Double.class};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method staticMethod = clazz.getMethod&#40;&#34;concatenate&#34;, staticMethodArgsTypes&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object&#91;&#93;&nbsp;staticMethodArgs = {new String&#40;&#34;Book&#34;&#41;, new Integer&#40;33&#41;, new Double&#40;5.32&#41;};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;staticMethod.getName&#40;&#41;&nbsp;+&nbsp;&#34;&#58;&nbsp;&#34;&nbsp;+ staticMethod.invoke&#40;null, staticMethodArgs&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class&#91;&#93;&nbsp;constructorArgsTypes = {String.class, String.class, boolean.class};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructor constructor = clazz.getConstructor&#40;constructorArgsTypes&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object&#91;&#93;&nbsp;constructorArgs = {new String&#40;&#34;Hello&#34;&#41;, new String&#40;&#34;World&#34;&#41;, Boolean.TRUE};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object somethingInstance = constructor.newInstance&#40;constructorArgs&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field hello = clazz.getField&#40;&#34;hello&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;hello.getName&#40;&#41;&nbsp;+&nbsp;&#34;&#58;&nbsp;&#34;&nbsp;+ hello.get&#40;somethingInstance&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field world = clazz.getField&#40;&#34;world&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;world.getName&#40;&#41;&nbsp;+&nbsp;&#34;&#58;&nbsp;&#34;&nbsp;+ world.get&#40;somethingInstance&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field toLowerCase = clazz.getField&#40;&#34;toLowerCase&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;toLowerCase.getName&#40;&#41;&nbsp;+&nbsp;&#34;&#58;&nbsp;&#34;&nbsp;+ toLowerCase.get&#40;somethingInstance&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class&#91;&#93;&nbsp;helloMethodArgsTypes = {String.class};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method printHelloMethod = clazz.getMethod&#40;&#34;printHello&#34;, helloMethodArgsTypes&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object&#91;&#93;&nbsp;helloMethodArgs = {new String&#40;&#34;!!!&#34;&#41;};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;printHelloMethod.getName&#40;&#41;&nbsp;+&nbsp;&#34;&#58;&nbsp;&#34;&nbsp;+ printHelloMethod.invoke&#40;somethingInstance, helloMethodArgs&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_wODk3M','java');</script><br /><br /><br />На что следует обратить внимание:<br />1. При вызове статического метода или осуществлении доступа к статическому полю класса вместо экземпляра класса в методы invoke(...), get(...) и set(...) передается null.<br />2. Для нахождения/выполнения конструктора или метода необходимо знать, какие аргументы они имеют. Если конструктор или метод не имеет таковых, тогда передается пустой массив или null.<br /><br /><b>Изменение уровня доступа</b><br /><br />Если конструктор, метод или поле имеют модификаторы protected или private, это еще не значит, что они не доступны. При помощи механизма reflection можно изменить уровень доступа к любому элементу класса или объекта. Для этого у полученного элемента надо вызвать метод setAccessible(true).<br /><br /><div class='postcolor'><table class='code' cellspacing='0' summary='table14'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_TczOWN'><br />public class Name<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private static String DEFAULT_NAME =&nbsp;&#34;Unknown&#34;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private String name;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private String getName&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private void setName&#40;String name&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private static String getDefaultName&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return DEFAULT_NAME;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private Name&#40;String name&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;<br />}<br /><br />public class Main<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throws IllegalAccessException, InvocationTargetException,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;InstantiationException, NoSuchMethodException, NoSuchFieldException<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class clazz = Name.class;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field defaultNameField = clazz.getDeclaredField&#40;&#34;DEFAULT_NAME&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;defaultNameField.setAccessible&#40;true&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class&#91;&#93;&nbsp;constructorArgsTypes = {String.class};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructor constructor = clazz.getDeclaredConstructor&#40;constructorArgsTypes&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constructor.setAccessible&#40;true&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object&#91;&#93;&nbsp;constructorArgs = {defaultNameField.get&#40;null&#41;};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object nameInstance = constructor.newInstance&#40;constructorArgs&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method getNameMethod = clazz.getDeclaredMethod&#40;&#34;getName&#34;, null&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getNameMethod.setAccessible&#40;true&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;getNameMethod.invoke&#40;nameInstance, null&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class&#91;&#93;&nbsp;setNameMethodArgsTypes = {String.class};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method setNameMethod = clazz.getDeclaredMethod&#40;&#34;setName&#34;, setNameMethodArgsTypes&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setNameMethod.setAccessible&#40;true&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object&#91;&#93;&nbsp;setNameMethodArgs = {new String&#40;&#34;Name&#34;&#41;};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setNameMethod.invoke&#40;nameInstance, setNameMethodArgs&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;getNameMethod.invoke&#40;nameInstance, null&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method getDefaultNameMethod = clazz.getDeclaredMethod&#40;&#34;getDefaultName&#34;, null&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getDefaultNameMethod.setAccessible&#40;true&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;getDefaultNameMethod.invoke&#40;null, null&#41;&#41;;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_TczOWN','java');</script><br /><br /><b>Работаем с массивами</b><br /><br />Для работы с массивами в пакете java.lang.reflect предусмотрен класс Array. С его помощью можно динамически создавать массивы, определять их типы и свойства.<br /><br /><div class='postcolor'><table class='code' cellspacing='0' summary='table15'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_xNTUyZ'><br />public class LengthAndDimension<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object object = new double&#91;1&#93;&#91;2&#93;&#91;3&#93;&#91;4&#93;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boolean isArray = object.getClass&#40;&#41;.isArray&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Object is Array&#58;&nbsp;&#34;&nbsp;+ isArray&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&#40;isArray&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int arrayLength = Array.getLength&#40;object&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Array length&#58;&nbsp;&#34;&nbsp;+ arrayLength&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int arrayDimension = getDimension&#40;object&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Array dimension&#58;&nbsp;&#34;&nbsp;+ arrayDimension&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;private static int getDimension&#40;Object array&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int dimension = 0;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class clazz = array.getClass&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while&#40;clazz.isArray&#40;&#41;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clazz = clazz.getComponentType&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dimension++;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return dimension;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br />&nbsp;&nbsp;&nbsp;&nbsp;<br /><br /><br />public class CreateAndExpand<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// create arrays<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&#91;&#93;&nbsp;stringArray1 =&nbsp;&#40;String&#91;&#93;&#41;Array.newInstance&#40;String.class, 5&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&#91;&#93;&#91;&#93;&nbsp;stringArray2 =&nbsp;&#40;String&#91;&#93;&#91;&#93;&#41;Array.newInstance&#40;String&#91;&#93;.class, 5&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&#91;&#93;&#91;&#93;&nbsp;stringArray3 =&nbsp;&#40;String&#91;&#93;&#91;&#93;&#41;Array.newInstance&#40;String.class, new int&#91;&#93;{5, 10}&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// expand array<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&#91;&#93;&nbsp;stringArray4 =&nbsp;&#40;String&#91;&#93;&#41;&nbsp;Array.newInstance&#40;stringArray1.getClass&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.getComponentType&#40;&#41;, Array.getLength&#40;stringArray1&#41;&nbsp;+ 10&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.arraycopy&#40;stringArray1, 0, stringArray4, 0, Array.getLength&#40;stringArray1&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array.set&#40;stringArray4, 0, new String&#40;&#34;Hello&#34;&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;String array value of&nbsp;&#91;0&#93;&#58;&nbsp;&#34;&nbsp;+ Array.get&#40;stringArray4, 0&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_xNTUyZ','java');</script><br /><b><br />Proxy объекты. Динамическая связь интерфейсов</b><br /><br />Прежде чем приступить к рассмотрению данной темы, определимся, что такое Proxy и прокси-объект.<br /><br />Proxy - это паттерн, который необходимо использовать в тех случаях, когда обычного взаимодействия с объектом не достаточно, т.е. взаимодействие с ним выполняется по более сложному сценарию. Прокси-объект должен реализовывать тот же интерфейс, что и реальный объект, а также иметь доступ к реальному объекту для взаимодействия с ним. Если прокси-объект и реальный объект находятся в одной JVM, то для выполнения этого условия прокси-объекту достаточно иметь ссылку на реальный объект. Клиенты взаимодействуют с прокси-объектом, который, в свою очередь, делегирует вызовы реальному объекту, предварительно выполняя дополнительные операции.<br /><br />Прокси может быть трех типов:<br />Virtual Proxy - применяется в тех случаях, когда создание реального объекта приводит к большим накладным расходам (например, для создания реального объекта затрачивается много времени или реальный объект требует больших ресурсо-затрат). Для этого Virtual Proxy объект выполняет инициализацию реального объекта постепенно, по требованию клиента.<br />Remote Proxy - удаленный прокси-объект, обеспечивает коммуникацию с реальным объектом, а также может выполнять маршелизацию и демаршелизацию отправленных и получаемых данных<br />Protection Proxy - используется для управления доступом к методам реального объекта.<br /><br />Reflection предлагает простой и, на мой взгляд, очень гибкий способ создания прокси-объектов. В качестве примера создадим прокси-объект, который будет преобразовывать аргументы, имеющие тип String, в верхний регистр и делегировать вызовы реальному объекту.<br />Описание:<br />IName - интерфейс, реализуемый классом Name (реальный класс)<br />Name - реальный класс<br />NameProxy - прокси-класс, реализующий интерфейс InvocationHandler. В интерфейсе InvocationHandler определен один-единственный метод public Object invoke(Object proxy, Method method, Object[] args), который и является методом-&quot;посредником&quot;&nbsp;между клиентом прокси-объекта и реальным объектом, т.е. при вызове метода прокси-объекта всегда вызывается метод invoke(...), в котором необходимо определить логику взаимодействия с реальным объектом<br />NameProxyFactory - создает прокси-объект, имеющий тип IName<br /><br /><div class='postcolor'><table class='code' cellspacing='0' summary='table16'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_GIxZGU'><br />public interface IName<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public void setName&#40;String name&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public String getName&#40;&#41;;<br />}<br /><br />public class Name implements IName<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private String name;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public void setName&#40;String name&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public String getName&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this.name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class NameProxy implements InvocationHandler<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private IName name;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public NameProxy&#40;IName name&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public Object invoke&#40;Object proxy, Method method, Object&#91;&#93;&nbsp;args&#41;&nbsp;throws Throwable<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;&#40;args != null&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&#40;int argIndex = 0;&nbsp;argIndex&nbsp;&#60;&nbsp;args.length;&nbsp;argIndex++&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&#40;args&#91;argIndex&#93;&nbsp;instanceof String&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;args&#91;argIndex&#93;&nbsp;=&nbsp;&#40;&#40;String&#41;args&#91;argIndex&#93;&#41;.toUpperCase&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object result = method.invoke&#40;this.name, args&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;&#34;Method&nbsp;&#39;&#34;&nbsp;+ method.getName&#40;&#41;&nbsp;+&#34;&#39;&nbsp;has been invoked&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return result;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class NameProxyFactory<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private final static Class&#91;&#93;&nbsp;interfaces = new Class&#91;&#93;{IName.class};<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public static IName createProxy&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NameProxy proxy = new NameProxy&#40;new Name&#40;&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&#40;IName&#41;&nbsp;Proxy.newProxyInstance&#40;IName.class.getClassLoader&#40;&#41;,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interfaces, proxy&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class Main<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IName nameProxy = NameProxyFactory.createProxy&#40;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nameProxy.setName&#40;&#34;Maxim&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;nameProxy.getName&#40;&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nameProxy.setName&#40;&#34;Helen&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;nameProxy.getName&#40;&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_GIxZGU','java');</script><br /><br />На этом применение Proxy не заканчивается. Часто возникают ситуации, когда необходимо связать несколько интерфейсов в один интерфейс. Например, необходимо предоставить клиенту единый интерфейс, который бы объединил функциональность целого ряда классов, выполненных в соответствии с паттерном Command. Для решения этой задачи reflection позволяет динамически связывать интерфейсы.<br /><br /><div class='postcolor'><table class='code' cellspacing='0' summary='table17'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_jMmQwM'><br />public interface ICommand<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public void execute&#40;&#41;;<br />}<br /><br />public class PrintHello implements ICommand<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private String hello;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public PrintHello&#40;String hello&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.hello = hello;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public void execute&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;this.hello&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class PrintWorld implements ICommand<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private String world;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public PrintWorld&#40;String world&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.world = world;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public void execute&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;this.world&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public interface ICommon<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public void printHello&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;public void printWorld&#40;&#41;;<br />}<br /><br />public class CommonProxy implements InvocationHandler<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private ICommand hello;<br />&nbsp;&nbsp;&nbsp;&nbsp;private ICommand world;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public CommonProxy&#40;ICommand hello, ICommand world&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.hello = hello;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.world = world;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public Object invoke&#40;Object proxy, Method method, Object&#91;&#93;&nbsp;args&#41;&nbsp;throws Throwable<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&#40;method.getName&#40;&#41;.equals&#40;&#34;printHello&#34;&#41;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.hello.execute&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if&#40;method.getName&#40;&#41;.equals&#40;&#34;printWorld&#34;&#41;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.world.execute&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new RuntimeException&#40;&#34;Method name=&#34;&nbsp;+ method.getName&#40;&#41;+&nbsp;&#34;&nbsp;not implemented yet.&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return null;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class CommonProxyFactory<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private final static Class&#91;&#93;&nbsp;interfaces = new Class&#91;&#93;{ICommon.class};<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public static ICommon createProxy&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICommand hello = new PrintHello&#40;&#34;Hello&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICommand world = new PrintHello&#40;&#34;World&#34;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CommonProxy proxy = new CommonProxy&#40;hello, world&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&#40;ICommon&#41;&nbsp;Proxy.newProxyInstance&#40;ICommon.class.getClassLoader&#40;&#41;, interfaces, proxy&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class Main<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICommon common = CommonProxyFactory.createProxy&#40;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;common.printHello&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;common.printWorld&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_jMmQwM','java');</script><br /><br />Ну и напоследок, усовершенствуем предыдущий пример.<br /><br /><div class='postcolor'><table class='code' cellspacing='0' summary='table18'><tr><td><b>Код</b></td></tr><tr><td class='code'><script language='javascript' type='text/javascript'>includeSyntax('java');</script><code id='java_TRkNjB'><br />public interface ICommand<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public Method getMethod&#40;&#41;&nbsp;throws NoSuchMethodException;<br />&nbsp;&nbsp;&nbsp;&nbsp;public Object execute&#40;Object&#91;&#93;&nbsp;args&#41;;<br />}<br /><br />public class ConcatenateCommand implements ICommand<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public Method getMethod&#40;&#41;&nbsp;throws NoSuchMethodException<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class&#91;&#93;&nbsp;types = new Class&#91;&#93;{String.class, String.class};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return ICommon.class.getMethod&#40;&#34;concatenate&#34;, types&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public Object execute&#40;Object&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&#40;String&#41;args&#91;0&#93;&nbsp;+ args&#91;1&#93;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class SumCommand implements ICommand<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public Method getMethod&#40;&#41;&nbsp;throws NoSuchMethodException<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Class&#91;&#93;&nbsp;types = new Class&#91;&#93;{int.class, int.class, int.class};<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return ICommon.class.getMethod&#40;&#34;sum&#34;, types&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public Object execute&#40;Object&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int result =&nbsp;&#40;&#40;Integer&#41;args&#91;0&#93;&#41;.intValue&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;&#40;&#40;Integer&#41;args&#91;1&#93;&#41;.intValue&#40;&#41;&nbsp;+&nbsp;&#40;&#40;Integer&#41;args&#91;2&#93;&#41;.intValue&#40;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return Integer.valueOf&#40;result&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public interface ICommon<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public String concatenate&#40;String valueOne, String valueTwo&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public int sum&#40;int valueOne, int valueTwo, int valueThree&#41;;<br />}<br /><br />public class CommonProxy implements InvocationHandler<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private Map commands;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public CommonProxy&#40;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.commands = new HashMap&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public void addCommand&#40;ICommand command&#41;&nbsp;throws NoSuchMethodException<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&#40;!this.commands.containsValue&#40;command&#41;&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.commands.put&#40;command.getMethod&#40;&#41;, command&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public Object invoke&#40;Object proxy, Method method, Object&#91;&#93;&nbsp;args&#41;&nbsp;throws Throwable<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object result;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICommand command =&nbsp;&#40;ICommand&#41;&nbsp;this.commands.get&#40;method&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&#40;command != null&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = command.execute&#40;args&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw new RuntimeException&#40;&#34;Method name=&#34;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ method.getName&#40;&#41;+&nbsp;&#34;&nbsp;not implemented yet.&#34;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return result;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class CommonProxyFactory<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;private final static Class&#91;&#93;&nbsp;interfaces = new Class&#91;&#93;{ICommon.class};<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;public static ICommon createProxy&#40;&#41;&nbsp;throws NoSuchMethodException<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CommonProxy proxy = new CommonProxy&#40;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;proxy.addCommand&#40;new ConcatenateCommand&#40;&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;proxy.addCommand&#40;new SumCommand&#40;&#41;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;&#40;ICommon&#41;&nbsp;Proxy.newProxyInstance&#40;ICommon.class.getClassLoader&#40;&#41;, interfaces, proxy&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /><br />public class Main<br />{<br />&nbsp;&nbsp;&nbsp;&nbsp;public static void main&#40;String&#91;&#93;&nbsp;args&#41;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throws NoSuchMethodException<br />&nbsp;&nbsp;&nbsp;&nbsp;{<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICommon common = CommonProxyFactory.createProxy&#40;&#41;;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;common.concatenate&#40;&#34;Hello&nbsp;&#34;,&nbsp;&#34;World&#34;&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println&#40;common.sum&#40;7, 3, 7&#41;&#41;;<br />&nbsp;&nbsp;&nbsp;&nbsp;}<br />}<br /></code></td></tr></table></div><script language='javascript' type='text/javascript'>highlightSyntax('java_TRkNjB','java');</script> </div>
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+get_tags(104, 157972, 'tags_field');
+</script> 	</div>
+</div>
+</div>
+<img src="/style_images/2/p_pm-on.gif"   id="img6"  class="preload" alt="" />
+<img src="/style_images/2/p_email-on.gif" id="img7"  class="preload" alt="" />
+<img src="/style_images/2/p_www-on.gif"  id="img8"  class="preload" alt="" />
+<img src="/style_images/2/p_im-on.gif"   id="img9"  class="preload" alt="" />
+<img src="/style_images/2/p_icq-on.gif"  id="img10" class="preload" alt="" />
+<img src="/style_images/2/p_aim-on.gif"  id="img11" class="preload" alt="" />
+<img src="/style_images/2/p_yim-on.gif"  id="img12" class="preload" alt="" />
+<img src="/style_images/2/p_msn-on.gif"  id="img13" class="preload" alt="" />
+<img src="/style_images/2/p_skype-on.gif"  id="img20" class="preload" alt="" />
+<img src="/style_images/2/p_gtalk-on.gif"  id="img21" class="preload" alt="" />
+<img src="/style_images/2/p_jabber-on.gif"  id="img22" class="preload" alt="" />
+<img src="/style_images/2/p_report-on.gif" id="img1"  class="preload" alt="" />
+<img src="/style_images/2/p_delete-on.gif" id="img2"  class="preload" alt="" />
+<img src="/style_images/2/p_edit-on.gif" id="img3"  class="preload" alt="" />
+<img src="/style_images/2/p_quick_quote-on.gif" id="img4"  class="preload" alt="" />
+<img src="/style_images/2/p_quote-on.gif" id="img5"  class="preload" alt="" />
+<img src="/style_images/2/p_show-on.gif" id="img23"  class="preload" alt="" />
+<img src="/style_images/2/p_hide-on.gif" id="img24"  class="preload" alt="" />
+<img src="/style_images/2/p_tofaq-on.gif" id="img25"  class="preload" alt="" />
+<table cellspacing='0' summary='table19'>
+<tr>
+<td class="leftalign"><div id="s_pages_2" style="display:inline">&nbsp;&nbsp;</div></td>
+<td class="rightalign_ch3">
+&nbsp;
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+function show_hide_forum_rules() {
+alert("Для этого Вам необходимо набрать необходимое кол-во сообщений. Количество: 30");
+}
+</script>	
+<div align="left" id="forum_rules">
+<div class="sep"></div>
+<table cellspacing='1' class='maintable' summary='table20'>
+<tr class="info">
+<td colspan="2">Правила форума "Java"</td>
+</tr>
+<tr>
+<td align="center" class="forumrules_left" style="width: 205px">
+<a href="http://vingrad.ru/@LSD"><img src="http://forum.vingrad.ru/button/button.php?nick=LSD" alt="LSD"/></a>
+&nbsp;
+<a href="http://vingrad.ru/@batigoal"><img src="http://forum.vingrad.ru/button/button.php?nick=batigoal" alt="batigoal"/></a>
+<br/>
+<a href="http://vingrad.ru/@powerOn"><img src="http://forum.vingrad.ru/button/button.php?nick=powerOn" alt="powerOn"/></a>
+&nbsp;
+<a href="http://vingrad.ru/@tux"><img src="http://forum.vingrad.ru/button/button.php?nick=tux" alt="tux"/></a>
+</td>
+<td class="forumrules_right">
+<ul>
+<li><b>Прежде, чем задать вопрос, прочтите <a target="_blank"
+href="http://forum.vingrad.ru/topic-38511.html">это</a>!</b>
+</li>
+<li>Книги по Java собираются <a target="_blank"
+href="http://forum.vingrad.ru/topic-34063.html">здесь</a>.
+</li>
+</li>
+<li>Документация и ресурсы по Java находятся <a target="_blank"
+href="http://forum.vingrad.ru/topic-9229.html">здесь</a>.
+</li>
+<li>Используйте теги <b>[code=java][/code]</b> для подсветки
+кода. Используйтe чекбокс &quot;<b>транслит</b>&quot;, если у Вас
+нет русских шрифтов.</li>
+<li>Помечайте свой вопрос как решённый, если на него получен ответ. Ссылка &quot;<b>Пометить как решённый</b>&quot; находится над первым постом.</li>
+<li>Действия модераторов можно обсудить <a target="_blank"
+href="http://forum.vingrad.ru/Guestbook.html">здесь</a>.
+</li>
+<li>FAQ раздела лежит <a target="_blank"
+href="http://forum.vingrad.ru/vingrad-faq/index.html">здесь</a>.
+</li>
+</ul>
+<hr></hr>
+<p>Если Вам помогли, и атмосфера форума Вам понравилась, то заходите
+к нам чаще! С уважением,
+<a href="http://vingrad.ru/@LSD">LSD</a>,
+<a href="http://vingrad.ru/@batigoal">batigoal</a>,
+<a href="http://vingrad.ru/@powerOn">powerOn</a>,
+<a href="http://vingrad.ru/@tux">tux</a>.</p>
+</td>
+</tr>
+</table>
+</div>&nbsp;<br />
+<table cellspacing='1' class='maintable' summary='table21'>
+<tr>
+<td class="threelines_bottom_1" colspan="2">
+1 Пользователей читают эту тему (1 Гостей и 0 Скрытых Пользователей)
+</td>
+</tr>
+<tr>
+<td class="threelines_bottom_2" colspan="2">
+0 Пользователей: 
+</td>
+</tr>
+<tr>
+<td class="threelines_bottom_3 centeralign" colspan="2">
+&laquo; <a href="http://forum.vingrad.ru/topic-157972/view-old.html">Предыдущая тема</a> &#0124; <strong><a href="http://forum.vingrad.ru/java-general.html">Java: Общие вопросы</a></strong> &#0124; <a href="http://forum.vingrad.ru/topic-157972/view-new.html">Следующая тема</a> &raquo;
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+<!--
+MessageMax = 30000;
+v_t=false;
+s_t=0;
+tid=157972;
+auth_key='880ea6a14ea49e853634fbdc5015a024';
+show_type='faq';
+del_q = 'Вы действительно хотите удалить это сообщение?';
+del_no = 'Не хотите, как хотите :)';
+of_postcolor();
+ToolMenu_init();
+var flash_w = '200'; var flash_h = '400';
+var ubbc_dir = 'html/UBBC';
+var emoticon_dir = 'html/emoticons';
+ToolMenu_loadData('java');
+addTranslitListener(post.target, document.getElementById("fa_cb_translate"));
+//-->
+</script>
+<br />
+<div class="rightalign">
+<a href="http://forum.vingrad.ru/act-Track/f-104/t-157972.html" title="Уведомление на e-mail об ответах в тему">Подписаться на тему</a> |
+<a href="http://forum.vingrad.ru/act-Track/f-104/type/forum_id/index.html" title="Уведомление на e-mail о новых темах на форуме">Подписка на этот форум</a> |
+<a href="http://forum.vingrad.ru/act-Print/client/choose/f-104/t-157972.html" title="Скачивание темы в различных форматах или просмотр версии для печати">Скачать/Распечатать тему</a><br /><br />
+</div>
+<br />
+<div align="right"><form onsubmit="if(document.jumpmenu.f.value == -1){return false;}" action='http://forum.vingrad.ru/index.php?act=SF' method='get' name='jumpmenu'>
+<input type='hidden' name='act' value='SF' />
+<input type='hidden' name='s' value='' />
+<select name='f' onchange="if(this.options[this.selectedIndex].value != -1){ document.jumpmenu.submit() }" class='forminput'>
+<optgroup label="Перейти на сайт">
+<option value='sj_home'>Главная страница форума</option>
+<option value='sj_search'>Поиск</option>
+<option value='sj_help'>Помощь</option>
+</optgroup>
+<optgroup label="Переход по форумам"><option value='-1'>Программирование</option>
+<option value="1">&nbsp;&nbsp;- C++</option>
+<option value="2">&nbsp;&nbsp;- Delphi, Kylix and Pascal</option>
+<option value="9">&nbsp;&nbsp;- Java</option>
+<option value="47">&nbsp;&nbsp;- .NET</option>
+<option value="3">&nbsp;&nbsp;- Visual Basic</option>
+<option value="4">&nbsp;&nbsp;- ASM</option>
+<option value="116">&nbsp;&nbsp;- Python</option>
+<option value="12">&nbsp;&nbsp;- Базы данных</option>
+<option value="115">&nbsp;&nbsp;- Красная книга</option>
+<option value='-1'>Разработка систем для Web</option>
+<option value="6">&nbsp;&nbsp;- PHP</option>
+<option value="118">&nbsp;&nbsp;- Ruby</option>
+<option value="5">&nbsp;&nbsp;- Perl  (+2 подфорумы)</option>
+<option value="15">&nbsp;&nbsp;- Flash platform</option>
+<option value="7">&nbsp;&nbsp;- ASP </option>
+<option value="10">&nbsp;&nbsp;- JavaScript</option>
+<option value="16">&nbsp;&nbsp;- Теория веб-дизайна </option>
+<option value="64">&nbsp;&nbsp;- Вёрстка веб-сайтов </option>
+<option value="41">&nbsp;&nbsp;- Хостинг и доменные имена </option>
+<option value="121">&nbsp;&nbsp;- Администрирование Web серверов и Web служб  (+1 подфорумы)</option>
+<option value="122">&nbsp;&nbsp;- XML, XSL </option>
+<option value="18">&nbsp;&nbsp;- Интернет-бизнес и продвижение сайтов</option>
+<option value="177">&nbsp;&nbsp;- Работа с готовыми скриптами и поиск движков</option>
+<option value='-1'>Технологии и алгоритмы</option>
+<option value="13">&nbsp;&nbsp;- Алгоритмы </option>
+<option value="11">&nbsp;&nbsp;- Технологии</option>
+<option value="123">&nbsp;&nbsp;- Репортинговые системы </option>
+<option value="36">&nbsp;&nbsp;- Программирование контроллеров </option>
+<option value="128">&nbsp;&nbsp;- Программирование мобильных устройств </option>
+<option value="129">&nbsp;&nbsp;- Программирование игр, графики и искусственного интеллекта </option>
+<option value='-1'>Компьютерные системы</option>
+<option value="28">&nbsp;&nbsp;- MS Windows </option>
+<option value="29">&nbsp;&nbsp;- Linux/Unix</option>
+<option value="75">&nbsp;&nbsp;- 1C: Предприятие, SAP, ERP и учётные системы </option>
+<option value="38">&nbsp;&nbsp;- Сетевые технологии </option>
+<option value="21">&nbsp;&nbsp;- Программное обеспечение </option>
+<option value="22">&nbsp;&nbsp;- Компьютерное железо</option>
+<option value="60">&nbsp;&nbsp;- MS Office</option>
+<option value="132">&nbsp;&nbsp;- Звук, графика и видео</option>
+<option value='-1'>Разное</option>
+<option value="25">&nbsp;&nbsp;- Работа в офисе</option>
+<option value="42">&nbsp;&nbsp;- Совместные проекты/поиск партнёров </option>
+<option value="20">&nbsp;&nbsp;- Готовые и разрабатываемые проекты</option>
+<option value="272">&nbsp;&nbsp;- Управление проектами</option>
+<option value="214">&nbsp;&nbsp;- Наши тесты  (+1 подфорумы)</option>
+<option value="293">&nbsp;&nbsp;- Игры </option>
+<option value="150">&nbsp;&nbsp;- Компьютерная литература  (+1 подфорумы)</option>
+<option value="193">&nbsp;&nbsp;- Флейм </option>
+<option value="24">&nbsp;&nbsp;- Разные вопросы</option>
+<option value='-1'>Vingrad</option>
+<option value="141">&nbsp;&nbsp;- Vingrad - Колледж</option>
+<option value="27">&nbsp;&nbsp;- Vingrad</option>
+<option value="197">&nbsp;&nbsp;- Наши встречи  (+1 подфорумы)</option>
+<option value="52">&nbsp;&nbsp;- Наши проекты</option>
+<option value="43">&nbsp;&nbsp;- Форум для админов и модераторов</option>
+</optgroup>
+</select>&nbsp;<input type='submit' value='ок!' class='forminput' /></form></div>
+<br />
+<div id="l_table" style="display: inline;"></div> 
+<br />
+<div align="center">
+<script type="text/javascript"><!--
+document.write('<a href="http://www.liveinternet.ru/click" '+
+'target="_blank"><img src="http://counter.yadro.ru/hit?t14.6;r'+
+escape(document.referrer)+((typeof(screen)=='undefined')?'':
+';s'+screen.width+'*'+screen.height+'*'+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
+';i'+escape('Жж'+document.title.substring(0,80))+';'+Math.random()+
+'" alt=" " title="LiveInternet: показано число просмотров за 24 часа, посетителей за 24 часа и за сегодня " '+
+'border="0" width="88" height="31" /><\/a>')//--></script>
+<script type="text/javascript">
+<!--
+d=document;a='';a+=';r='+escape(d.referrer)
+js=10//--></script>
+<script type="text/javascript">
+<!--
+a+=';j='+navigator.javaEnabled()
+js=11//--></script>
+<script type="text/javascript"><!--
+s=screen;a+=';s='+s.width+'*'+s.height
+a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth)
+js=12
+//--></script>
+<script type="text/javascript"><!--
+js=13//--></script>
+<script type="text/javascript"><!--
+d.write('<a href="http://top.mail.ru/jump?from=97025"'+
+' target=_top><img src="http://top.list.ru/counter'+
+'?id=97025;t=210;js='+js+a+';rand='+Math.random()+
+'" alt="Рейтинг@Mail.ru"'+' border="0" height="31" width="88" /><\/a>');
+//-->
+</script>
+<noscript>
+<a target="_top" href="http://top.mail.ru/jump?from=97025"><img
+src="http://top.list.ru/counter?js=na;id=97025;t=210"
+border="0" height="31" width="88"
+alt="Рейтинг@Mail.ru"/></a>
+</noscript>
+<script type="text/javascript">
+<!--
+-->
+</script>
+<img src="http://counter.rambler.ru/top100.cnt?687606" alt="" width="1" height="1" border="0" />
+<a href="http://top100.rambler.ru/top100/">
+<img src="http://top100-images.rambler.ru/top100/banner-88x31-rambler-blue3.gif" alt="Rambler's Top100" width="88" height="31" border="0" /></a>
+<br /><br />
+<div id='techinfo'>[ Время генерации скрипта: 0.7635 ] &nbsp; [ Использовано запросов: 21 ] &nbsp; [ GZIP включён ] <br /><br /></div>
+<!--557926083-->  <br />
+<a href="http://forum.vingrad.ru/act-Help/CODE-01/HID-21.html">Реклама на сайте</a>
+<br /><br />
+</div>
+</div> 
+<div class="div_fullwidth">
+<table cellspacing='0' id='copyrights' summary='table22'>
+<tr>
+<td class="set88width">
+<div>&nbsp;</div>
+</td>
+<td>
+<script language="JavaScript" src="http://devnews.ru/get_news.php?cid="></script>По вопросам размещения рекламы пишите на vladimir(sobaka)vingrad.ru
+<br />
+Хостинг: <a href="http://hosting.vingrad.ru">Vingrad Hosting</a>
+&nbsp;&nbsp;&nbsp;
+<a href="http://forum.vingrad.ru/act-Help/CODE-01/HID-25.html">Отказ от ответственности</a>
+&nbsp;&nbsp;&nbsp;
+Powered by <a rel="nofollow" href="http://www.invisionboard.com" target='_blank'>Invision Power Board</a>(R) 1.3 &copy; 2003 &nbsp;<a rel="nofollow" href='http://www.invisionpower.com' target='_blank'>IPS, Inc.</a></td>
+<td class="set88width"><a href="http://validator.w3.org/check?uri=referer"><img src="images/valid-xhtml10.png" alt="Valid XHTML 1.0!" /></a></td>
+</tr>
+</table>
+</div> 
+<script type="text/javascript">
+<!--
+setTimeout(setAnchorDef,200);
+RollOver_init();
+//-->
+</script>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-1729441-1";
+urchinTracker();
+</script>
+</div>
+</div>
+</div>
+</body>
+</html>

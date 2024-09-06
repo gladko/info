@@ -1,0 +1,70 @@
+//////////////////////////////////////////////////////////
+		it is my test python + docker project
+//////////////////////////////////////////////////////////
+see	https://docs.docker.com/get-started/part2/
+
+
+
+
+sudo su -
+
+
+
+docker build --tag=vk-sam .				# Builds image
+docker run -d -p 8085:80 vk-sam				# Starts image
+docker rmi -f vk.sam					# Remove image
+
+//////////////////////////////////////////////////////////
+		USAGE of started app
+//////////////////////////////////////////////////////////
+in browser run to 	http://localhost:8085
+curl http://localhost:8085
+
+
+
+
+
+//////////////////////////////////////////////////////////
+		REPOSITORY
+//////////////////////////////////////////////////////////
+docker tag vk-sam vladika/vk.test.repo:part2
+docker push vladika/vk.test.repo:part2			# Publish to repo
+
+docker run -d -p 8086:80 vladika/vk.test.repo:part2	# Start single container from repository
+
+
+
+//////////////////////////////////////////////////////////
+		SWARM
+//////////////////////////////////////////////////////////
+docker swarm leave --force				# Take down the swarm.
+docker node ls						# View the nodes in this swarm
+
+docker swarm init --advertise-addr <swarm-manager-ip>	# Init swarm master
+
+docker swarm join --token <token> <swarm-manager-ip>:2377
+
+docker swarm join-token worker				# Shows command for joining to swarm
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////
+		REDIS IN DOCKER
+//////////////////////////////////////////////////////////
+https://markheath.net/post/exploring-redis-with-docker			# Redis CLI in docker
+
+https://www.oskarlind.com/running-a-redis-instance-on-docker/
+
+
+Start by launching a redis server:
+docker run --name my-redis -p 8379:6379 -d redis
+
+redis client:
+docker exec -ti my-redis redis-cli
+
+
+docker run --link my-redis:redis redis redis-cli -h redis -p 6379

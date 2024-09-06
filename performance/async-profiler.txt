@@ -1,0 +1,43 @@
+jps
+
+cd /Users/koz963/workspace/tools/async-profiler-1.8.2
+
+
+./profiler.sh -d 5 -f out.html -o svg StringBuilderTest
+ 
+./profiler.sh -d 5 -f out.html -o svg server-0.0.6.jar
+
+./profiler.sh --loop 1m -f out-%t.html <pid>    - continuous profiler
+ 
+
+
+-d duration
+-f output file name
+-o fmt            output format: summary|traces|flat|collapsed|svg|tree|jfr
+
+
+Options:
+  -e event          profiling event: cpu|alloc|lock|cache-misses etc.
+  -d duration       run profiling for <duration> seconds
+  -f filename       dump output to <filename>
+  -i interval       sampling interval in nanoseconds
+  -j jstackdepth    maximum Java stack depth
+  -b bufsize        frame buffer size
+  -t                profile different threads separately
+  -s                simple class names instead of FQN
+  -g                print method signatures
+  -a                annotate Java method names
+  -o fmt            output format: summary|traces|flat|collapsed|svg|tree|jfr
+  -I include        output only stack traces containing the specified pattern
+  -X exclude        exclude stack traces with the specified pattern
+  -v, --version     display version string
+   
+  --title string    SVG title
+  --width px        SVG width
+  --height px       SVG frame height
+  --minwidth px     skip frames smaller than px
+  --reverse         generate stack-reversed FlameGraph / Call tree
+
+  --all-kernel      only include kernel-mode events
+  --all-user        only include user-mode events
+  --cstack mode     how to traverse C stack: fp|lbr|no

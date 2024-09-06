@@ -1,0 +1,75 @@
+https://docs.splunk.com/Documentation/Splunk/7.3.5/SearchTutorial/Useasubsearch
+
+
+top
+distinct_count (FIELD_NAME)
+dc = distinct_count
+values (FIELD_NAME)		список значений поля
+stats X by Y			лист 
+table - 				отфильтровывает колонки
+rename
+AS
+lookup 
+chart 					count the number of events
+timechart 
+eval 					calculate the conversion rates
+
+
+sourcetype=access_* status=200 action=purchase
+ | top limit=1 clientip
+ 
+sourcetype=access_* status=200 action=purchase clientip=87.194.216.51
+ | stats count, distinct_count(productId), values(productId) by clientip
+ 
+ 
+sourcetype=access_* status=200 action=purchase
+ | top limit=1 clientip
+ | table clientip
+
+sourcetype=access_* status=200 action=purchase 
+    [ search sourcetype=access_* status=200 action=purchase 
+    | top limit=1 clientip 
+    | table clientip] 
+ | stats count, distinct_count(productId), values(productId) by clientip
+ 
+ sourcetype=access_* status=200 action=purchase 
+    [search sourcetype=access_* status=200 action=purchase 
+    | top limit=1 clientip 
+    | table clientip] 
+| stats count AS "Total Purchased", dc(productId) AS "Total Products", values(productId) AS "Product IDs" by clientip 
+| rename clientip AS "VIP Customer"
+
+sourcetype=access_*
+ |stats values(price) AS Price BY productName
+ |rename productName AS "Product Name"
+ 
+ 
+sourcetype=access_* status=200 action=purchase 
+    [ search sourcetype=access_* status=200 action=purchase 
+    | top limit=1 clientip 
+    | table clientip] 
+| stats count AS "Total Purchased", dc(productId) AS "Total Products", values(productName) AS "Product IDs" BY clientip 
+| rename clientip AS "VIP Customer"
+
+
+sourcetype=access_* status=200 
+| chart count AS views count(eval(action="addtocart")) AS addtocart count(eval(action="purchase")) AS purchases by productName
+
+
+sourcetype=access_* status=200 
+| stats count AS views count(eval(action="addtocart")) AS addtocart count(eval(action="purchase")) AS purchases by productName 
+| eval viewsToPurchases=(purchases/views)*100 
+| eval cartToPurchases=(purchases/addtocart)*100 
+| table productName views addtocart purchases viewsToPurchases cartToPurchases 
+| rename productName AS "Product Name", views AS "Views", addtocart as "Adds To Cart", purchases AS "Purchases"
+
+
+sourcetype=access_* 
+| timechart count(eval(action="purchase")) by productName usenull=f useother=f
+
+
+sourcetype=access_* status=200 action=purchase 
+| chart sparkline(count) AS "Purchases Trend" count AS Total BY categoryId 
+| rename categoryId AS Category
+
+

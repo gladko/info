@@ -1,0 +1,56 @@
+#
+# Concurrency issues
+#
+- Data race - sharing access without synchronization
+- Race condition - is a situation where the behaviour of the software depends on the sequence/timing of the execution
+- Thread contention - thread works slower in multithread environment then it would run in single thread environment
+- Thread race - ?
+- Dead lock
+- Live lock
+
+
+
+#
+# Data race
+#
+
+Data race occurs when 2 instructions from different threads access the same memory location, at least one of these accesses is a write and there is no synchronization that is mandating any particular order among these accesses.
+
+
+#
+# Race condition
+#
+
+A race condition is a semantic error. It is a flaw that occurs in the timing or the ordering of events that leads to erroneous program behaviour. Many race conditions can be caused by data races, but this is not necessary.
+
+Consider the following simple example where x is a shared variable:
+
+Thread 1    Thread 2
+
+ lock(l)     lock(l)
+ x=1         x=2
+ unlock(l)   unlock(l)
+In this example, the writes to x from thread 1 and 2 are protected by locks, therefore they are always happening in some order enforced by the order with which the locks are acquired at runtime. That is, the writes' atomicity cannot be broken; there is always a happens before relationship between the two writes in any execution. We just cannot know which write happens before the other a priori.
+
+There is no fixed ordering between the writes, because locks cannot provide this. If the programs' correctness is compromised, say when the write to x by thread 2 is followed by the write to x in thread 1, we say there is a race condition, although technically there is no data race.
+
+It is far more useful to detect race conditions than data races; however this is also very difficult to achieve.
+
+
+#
+# Thread contention 
+#
+
+Several answers seem to focus on lock contention, but locks are not the only resources on which contention can be experienced. Contention is simply when two threads try to access either the same resource or related resources in such a way that at least one of the contending threads runs more slowly than it would if the other thread(s) were not running.
+
+The most obvious example of contention is on a lock. If thread A has a lock and thread B wants to acquire that same lock, thread B will have to wait until thread A releases the lock.
+
+Now, this is platform-specific, but the thread may experience slowdowns even if it never has to wait for the other thread to release the lock! This is because a lock protects some kind of data, and the data itself will often be contended as well.
+
+For example, consider a thread that acquires a lock, modifies an object, then releases the lock and does some other things. If two threads are doing this, even if they never fight for the lock, the threads may run much slower than they would if only one thread was running.
+
+Why? Say each thread is running on its own core on a modern x86 CPU and the cores don't share an L2 cache. With just one thread, the object may remain in the L2 cache most of the time. With both threads running, each time one thread modifies the object, the other thread will find the data is not in its L2 cache because the other CPU invalidated the cache line. On a Pentium D, for example, this will cause the code to run at FSB speed, which is much less than L2 cache speed.
+
+Since contention can occur even if the lock doesn't itself get contended for, contention can also occur when there is no lock. For example, say your CPU supports an atomic increment of a 32-bit variable. If one thread keeps incrementing and decrementing a variable, the variable will be hot in the cache much of the time. If two threads do it, their caches will contend for ownership of the memory holding that variable, and many accesses will be slower as the cache coherency protocol operates to secure each core ownership of the cache line.
+
+Ironically, locks typically reduce contention. Why? Because without a lock, two threads could operate on the same object or collection and cause lots of contention (for example, there are lock free queues). Locks will tend to deschedule contending threads, allowing non-contending threads to run instead. If thread A holds a lock and thread B wants that same lock, the implementation can run thread C instead. If thread C doesn't need that lock, then future contention between threads A and B can be avoided for awhile. (Of course, this assumes there are other threads that could run. It won't help if the only way the system as a whole can make useful progress is by running threads that contend.)

@@ -1,0 +1,92 @@
+
+
+//////////////////////////////////////////////////////////////  
+		SHELL  
+//////////////////////////////////////////////////////////////  
+source ~/.vk_profile  - applies my personal SHELL variables  
+echo $SHELL  
+
+
+
+//////////////////////////////////////////////////////////////  
+		DOWNLOAD & UPLOAD   
+//////////////////////////////////////////////////////////////  
+
+scp user@remote_host_name:/file_path local_path_to		# download file from a remote machine
+
+scp file_name user@remote_host_name:/path_to			# upload file to a remote machine
+scp data.txt user@taito.csc.fi:							# upload file to home dir
+scp -r data_dir user@taito.csc.fi:						# upload directory
+
+
+
+//////////////////////////////////////////////////////////////
+		STAT & ENV
+//////////////////////////////////////////////////////////////
+df -h										место на диске
+
+
+
+printenv									распечатать переменные окружения
+printenv | grep VAR_NAME
+echo $VAR_NAME
+set PROP_NAME								распечатать переменную окружения
+set PROP_NAME=VALUE
+
+hostname 									computer name
+cat /etc/os-release							OS info
+hostnamectl									OS info
+
+lsof +D <path>                                       кто использует файл <path> (MAC-OS)
+ps -ef | grep repeater                      процесс репиттера
+
+
+//////////////////////////////////////////////////////////////
+        NET  STAT  -   LINUX
+//////////////////////////////////////////////////////////////
+netstat -tpln | grep 7002                    check port usage (win)
+
+
+
+
+//////////////////////////////////////////////////////////////
+        NET  STAT  -    MAC
+//////////////////////////////////////////////////////////////
+nc -vz {HOST_NAME} 7004     		check port usage (mac)
+
+lsof -nP -iTCP:$SOME_PORT | grep LISTEN          print used ports (macOS)
+lsof -i -P | grep LISTEN                         who uses port (mac)
+
+
+lsof -i -P -a -p <PID>          Find ports used by a specific process
+
+networksetup -listallhardwareports           list all network interfaces       
+sudo tcpdump -i en0
+
+
+netstat, ping, dig, traceroute, whois, finger
+
+
+
+//////////////////////////////////////////////////////////////
+		Useful commands
+//////////////////////////////////////////////////////////////
+ cat, cd, cut, echo, find, grep, head, ls, sed, sort, tail, uniq, wc, xargs
+
+**chown** - change the user and/or group ownership of a given file, directory, or symbolic link.
+
+
+//////////////////////////////////////////////////////////////
+		less
+//////////////////////////////////////////////////////////////
+    * Page Up или b – прокрутка на одну страницу назад
+    * Page Down или space – прокрутка на одну страницу вперед
+    * Стрелки «Вверх» и «Вниз» – перемещение на одну строку вверх или вниз соответственно
+    * G – перейти к концу файла
+    * g – перейти к началу файла
+    * /chars – поиск forward символов chars  в файле
+    * n – поиск следующего совпадения по ранее введенным символам
+    * h – справка
+
+
+

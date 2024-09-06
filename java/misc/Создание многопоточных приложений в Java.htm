@@ -1,0 +1,1638 @@
+
+<html>
+
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=windows-1251" />
+<title>Java библиотека  - Создание многопоточных приложений в Java</title>
+
+
+
+<link rel="stylesheet" type="text/css" href="/sitedesign/standard/style.css" />
+
+<!-- set the content meta information -->
+
+<meta name="author" content="JUGA.RU" />
+<meta name="copyright" content="JUGA.RU &copy; 2003" />
+<meta name="description" content="
+
+
+
+
+   
+   
+   
+   
+      
+   
+
+
+
+
+Параллельные вычисления в настоящее время являются одной из самых приоритетных задач в области информатики. Если посмотреть на список TOP 100 (самые быстродействующие компьютеры в мире), легко заметить, что вся верхушка списка занята системами с массовым параллелизмом, состоящим из нескольких сотен, а то и тысяч процессорных блоков. Основная проблема заключается в том, что собрать такую систему зачастую оказывается проще, чем использовать, т.к. реализовать алгоритм, который будет эффективно распараллеливать свою работу на сотнях имеющихся в наличии вычислительных блоках, очень непросто. А от не адаптированного алгоритма толку на подобном суперкомпьютере не будет – скорость его выполнения будет не намного выше, чем на обычном PC. " />
+<meta name="keywords" content="Параллельные вычисления настоящее время являются одной из самых приоритетных задач области информатики Если посмотреть на список top 100 самые быстродействующие компьютеры мире легко заметить что вся верхушка списка занята системами массовым параллелизмом состоящим нескольких сотен то тысяч процессорных блоков Основная проблема заключается том собрать такую систему зачастую оказывается проще чем использовать реализовать алгоритм который будет эффективно распараллеливать свою работу сотнях имеющихся наличии вычислительных блоках очень непросто от не адаптированного алгоритма толку подобном суперкомпьютере скорость его выполнения намного выше обычном pc Зачем это нужно Но программирование суперкомпьютеров создание эффективных параллельных алгоритмов отдельная сложная тема Ей посвящено множество научных исследований имеется большое количество интересных статей книг Правда следует признать эффективного простого способа создания программ до сих пор существует этой статье мы затронем другую тему использование параллелизма обычных приложениях Ещё несколько лет назад создатели прикладных вполне обходились без уровне приложения Как устроена типичная простая программа под windows есть цикл обработки событий event loop внутри которого реализована логика взаимодействия программы пользователем Нажал пользователь клавишу enter программе пришло соответствующее событие вызвалась функция обработчик для этого события Эта выполнила некоторые действия например сохранила введённые данные вывела экран новую форму вернула управление основной После чего ждёт прихода следующего Всё просто красиво удобно программирования и… неудобно пользователя Дело все операции может выполнить мгновенно Например копирование файла дискетку занимает достаточно много времени Поскольку готова приёму следующих она реагирует Максимум можно сделать сменить тип курсора часики вывести окошко сообщением подождите минутку пользователю остаётся только гадать зависла или всё таки делает стоит немного подождать опытные пользователи способны определить по «косвенным признакам» загрузке cpu активности диска… чём причина проблемы состоянии выполнять параллельно две обработку пользовательских Другой пример Рассмотрим сёрверных приложений Классический сценарий каждым клиентом сёрвер устанавливает соединение сокету socket помощью системного вызова select определяет какому сокетов получены Дальше вызывает подпрограмму агента запроса данного клиента Структура получается простой но возникают здесь Во первых эффективным использованием ресурсов сёрвера пока выполняется один запрос остальные ждут вторых если выполнение требует реакции неприемлемым Не удаётся равномерно загрузить ресурсы за счёт повысить производительность читает диска при этом обычно простаивает хотелось бы других запросов требующих доступа диску Другая связана тем часто необходимо помнить контекст обработка текущего зависит результата предыдущих принципе ничего страшного нет можем завести специальную структуру данных запоминать состояние каждого Получается этакий конечный автомат рёбра соответствуют приходящим запросам Конечный гибкий мощный механизм вот программировать занятие приятных Приходится постоянно кто нас каком куда он потом попасть Опять сохранение получение состояния способствует компактности простоте кода Было гораздо был связан отдельный поток котором хранятся выполняться потоками клиентов Параллелизм точки зрения ОСПараллельные появились давно Даже такие примитивные системы как ms dos были Конечно машине всего процессор полного конечно достичь удастся Процессор каждый момент команды Тут уже задача операционной обеспечить правильное планирование различных так чтобы различные устройства диск использовались каждой «честно» выделялся свой квант планирования использует одну очередей задачами готовыми выполнению Каждой задаче назначается приоритет Обычно интерактивным задачам взаимодействующим пользователями назначать более высокий сравнению преимущественно вычислительными Также нужен критичным таким записью компакт проигрыватель музыки Приоритет меняться процессе работы находящейся режиме ожидания поднять активно выполняющейся наоборот снизить Это «честному» планированию быстрой Планировщик выбирает задачу начала наиболее высокоприоритетных выделяет ей передаёт Далее возможно следующее Программа полностью отрабатывает Тогда планировщик заносит её конец готовых следующую наибольшим приоритетом инициирует операцию которая быть немедленно выполнена чтение случае переносит ждущих готовую По окончании опять помещена Происходит системное прерывание появляется большим готовая ли продолжить запустить высокоприоритетный процесс Подобная схема ещё называется «преимущественной многозадачностью» preemptive multitasking При такой схеме никакая блокировать же Некоторые старые ОС 95 имели простую реализации модель называемую «не выталкивающей когда перепланирование процессов происходит желании активного процесса должна сама информировать прервать Естественно правильно работающая является следствием менее стабильной win семейством nt Поток такое Итак параллельные процессы используются Почему их нельзя решения наших Ответ представляет собой замкнутую своя память команд стек свои дескрипторы файлам другим устройствам средства между ограничены предоставляемым api межпроцессорного включают себя очереди обмена сообщениями процессами разделяемую shared memory синхронизационные примитивы семафоры критические секции вы хотите фоновое вам создать новый существующих механизмов ipc передачи этому процессу имени которые должны сохранены после получить уведомление завершении общем простейшая операция выливается во строчек Проблема состоит процессом связано порождение переключение контекста трудоёмкую Таким образом распараллеливания эти слабо связаны друг другом могут работать почти независимо друга необходим интенсивный обмен данными накладные расходы межпроцессного переключения контекстов оказываются настолько большими всякий выигрыш параллельной теряется Поэтому удивительно всех современных операционных системах поддерживаются облегчённые потоки threads На самом деле потоков разных существенно отличаться будем заострять внимание Определим самостоятельную активность имеет своей собственной памяти Вместо разделяют общую доступ данным другого потока значительно упрощает передачу ничем отличается параметров отличие изолированы изменены любым потоком повышенного внимания программировании многопоточных аккуратного использования синхронизации об позже За того меньше собственных запуск различными рамках одного быстрее имеют поэтому переключении надо менять таблицу отображения страниц Планирование система осуществляет точно Точнее многих поддерживающих единицей именно Важно отметить операционная способна организовать параллельное либо распределением различным процессорным многопроцессорной используя перепланировку истечении отведённого потоку кванта обоих случаях готовым тому прервано любой передано другому совсем понятие атомарной неделимой какая атомарная архитектуры используемого языка типа даже опций компилятора обсуждать Потоки java Механизм усовершенствованную схему мониторов Хоара Потоку соответствует класс lang thread Для своего интерфейс runnable собственный метод run собственно нужное действие Запустить методом start дождаться завершения join Ниже приведены примеры двух способов class mythread extends public void system out println is running }}public static main string args[] new try catch interruptedexception {}}илиclass myactivity implements strnig {}}А дожидаться активна работает крайней мере другими словами запущенных Иногда пометить «демон» метода setdaemon true Завершения демонов дожидается останавливает Вызвать запуска Ну хорошо запускать научились решена Нет начало говорили Посмотрим чревато Допустим пишем банковскую обслуживания банкоматов проверяет денег счету да снимает запрошенную сумму со счёта даёт банкомату добро выдачу account private int balance; boolean withdraw amount if balance return false; amount; true; }}Так решаем параллельную используем Вроде прекрасно одна основных проблем параллельного ошибки трудно воспроизводимы Теперь давайте внимательно проанализируем код несколькими отмечали прерван возможет Имеется два П1 П2 которых вызывается Пусть находится сумма 100уе запрашивает 80уе 60уе условие Оно истинно 80 перепланировка получает тоже 60 уменьшает баланс затребованную величину возвращает равен 40уе Управление возвращается Он значение баланса Баланс равен… деньгами обращаться здорово целостность страдать Кусок недопустимо влияние критической секцией критическую секцию дозволено входить одному Остальные будут ждать этот покинет языке оформления предусмотрено ключевое слово synchronized синхронизированный Можно объявить синхронизированными весь блок операторов }или this }В данном оба эквивалентны Первый представляется удобным второй обеспечивает большую гибкость Что означает аргумент конструкции объектом неявно монитор нечто отвечающее синхронизацию данному объекту Вся синхронизация осуществляется объектов блока блокируется данный экземпляр объекта Метод помеченный блокировку методов экземпляра класса самого статических объявляя говорим системе эксклюзивного гарантирует синхронизированных участков конкретного участок Синхронизированный производить счетами запрещено синхронизированного любых использующих классе deposit положить деньги мог Конструкция препятствует параллельному отмеченных синхронизированные нашем забыли Причём последствия могли печальными выполнении предотвращать нежелательное недостаточно Часто хочется уметь оповещать другой готовности него соответственно такого сообщения object предусмотрены методы wait notify notifyall этих должен эксклюзивным владельцем объявленного этим качестве параметра Эти работают следующим переводит режим точности ожидающий наступления никакого эффекта Следует ожидают выбран них возврата придётся конкурировать Только установив вновь эксклюзивную пробуждаются ждущие Кажется понятным зачем требуется объект перед вызовом снял эту пытался установить получения уведомления сделано проверка условия переход выполнялись атомарно делимым какого переменную связанную событием результат проверки отрицательный переходит простейший autoresetevent автосбросом waitevent while signaled {} signalevent пробудить спящий signaled;} Обратите делается цикле установлен signal ждущий помещён очередь вызвавший стал блокировки вызовет завладеет блокировкой продолжит Так переменная сбросит false выполнивший завладевший наконец обнаружит сброшен вынужден итерацию цикла также позван заблокировали какие еще объекты они останутся заблокированными Возможно хотели чаще свидетельствует ошибке повышения степени производительности избежания тупиковых ситуаций устанавливать короткий срок Следующий иллюстрирует проблему myclass foo }}В примере заблокированным ручным явным сбросом manualresetevent resetevent спящие реализация семафора Семафор классический синхронизационный примитив предложенный Дейкстрой распределения некоторого ограниченного количества классического занять ресурс освободить Операция счётчик доступных больше нуля вычитает единицу противном выполняющий тех станет используется оповещения увеличивается semaphore counter == 1; += }}Реализация используемой виртуальной машины некоторых библиотечном То самой участия Такие наименьшие системных вызовов такая позволяет имеющиеся Кроме большинстве случаев вытесняющую стратегию перепланировки было активный сам захотеть вызов блокирующего приводит переводится выбирается большинство текущих реализаций виртуальных машин системные win32 pthread над ними Вот ознакомились реализацией Простота конструкций используемых управления создаёт иллюзию написание ничуть сложнее написания расставил всюду вставил где создал многопоточная сравнения библиотеками используемыми С++ кажется простым сожалению эта простота кажущаяся Проблемы возникающие написании никуда исчезли часа следующей главе сложно писать главное отлаживать Вернёмся приходилось c++ Гуляющие указатели инициализированные переменные содержащие мусор висящие ссылки утечки отлавливаемые выходы индекса границу массива… грохающаяся непредсказуемом месте потому участке неправильно обошёлся указателем зависимости какой встретился даром создано столько всяких Сodeguardов boundscheckerов программах кажутся чуть самоустраняющимися инициализированы выход массива отслеживается пресекается гуляющих висячих указателей утечек ведёт себе абсолютно детерминированным сваливалась определённом наборе входных уверенным будучи запущенной раз набором получим тот самый полное торжество защищённых программных систем языков написали многопоточную программу видим непредсказуемым Будучи отлажена оттестирована запущена 1000 тысячу первый ни сего виснет Или хуже вдруг испорченными Попытка воспроизвести ошибку чему отлично падения Случаются столь катастрофические загадочные явления однопроцессорной вдвое мощной двухпроцессорной начинает порядок десятичный двоичный медленнее оказываемся первобытном дремучем лесу отладки недетерминировано работающей той лишь разницей продуктов boundscheckerа поиска ошибок мало качество оставляет желать лучшего приводящие неправильной работе многопоточного разбить конкурентный английский термин race condition поддаётся разумному переводу взаимные Ошибки первого рода недостатка второго избытка неправильного применения ошибками сталкивались банковским счётом начинают одновременно изменять изменяет смотрит одни те хорошего делать Понаставить тогда многопоточности испариться доступны эксклюзивном сможет чрезмерное необдуманное блокировок проблемам тупиковым ситуациям следующий pipe канал queue src; источник dst; приёмник forward переметить элемент источника src блокируем dst elem dequeue взять enqueue поместить backward переместить обратном направлении приёмника }}Допустим классом возможен потоке оператор устанавливается блокировка результате блокирование блокирован пытается попытка оканчивается неудачей Выйти ситуации смогут зовётся тупиком решается блокировал порядке Тупиковая ситуация возникнуть Этот прием кстати одним предотвращения старайтесь всегда одном ассоциировать объектами ресурсами приоритеты убывания приоритета иерархические тупиковую ситуацию вас единственный атрибутом someclass }}Теперь допустим о1 о2 выполняющие следующие вызовы o1 o2 ;П2 ;c большой вероятностью приведёт взаимной блокировке блокирует научиться определять возможные пытаться избегать компилятор нам тут поможет Придётся брать руки карандаш бумагу там говорил скорой кончине последней начинать рисовать граф Вершинам графе заблокированы блоке неопределённо заблокирован представим экземпляры вершиной вершины нарисовали изучаем ищем строим определяем другие позвать Нужно построить замыкание отношения иными учесть непосредственно позваны позовут забудьте наследование базового интерфейса привести вызову любого выведенного переопределяющего реализующего Граф получиться непотребно лучше явно строить уме никого забыть выяснили кого проводим участка блокировавшего помеченной ребро вершину помеченную Провели значит дело наш нём циклы нашли поздравляю возникновение тупиковой вашей невозможно напутали графом Нашли ну возможны варианты Помните пометили единственной Может оказаться существующей невозможен блокируются тонкое изучение использующее семантику конкретной Возникает вопрос автоматизировать описанную процедуру сами карандашом предоставить построение графа поиск циклов Хотя подобных уж Один jlint написан мной свободно скачать моего сайта моя текущая работа фирме Борланд верификацией соображениям корпоративной этики прекратил дальнейшую разработку совершенствование продукта описанный взгляд контекстно зависимый большом проекте слишком представления экземпляров велик процент белого шума ложных сообщений блокировках анализ найденных большого проекта нетривиальной задачей счастью конкурентного тупиковая воспроизведённой отладчиком анализу Просто смотрим застрявших заблокировать понять разрушить связанных конкурентным доступом дать рекомендации Очевидно каждые разделяемые изменяемые защищены решать программисту обнаружить места сделали Могу предложить общий способ смысл используют обращения m1 m2 получится можете попробовать совместно переменной отвечает нему получилось синхронизирующего элемента скорее ошибка рекомендация воспроизведению находятся вероятность сказывается параллелизм инструкций инструкции рассматриваться атомарные конфигурации перестают такими постарайтесь прогнать наткнётесь скрытые прогоне проявиться падением вызванные конфликтами распределение свести минимуму глобальных разделяемых которым остановки видели Однако запустив остановить stop помечен deprecated устаревший пользоваться им настоятельно рекомендуется веские причины остановленный произвольный оставить некорректном каких окажутся разблокированными «убивать» Надо заставить совершить «харакири» завершиться добровольно потоках выполняют некоторое циклическое поставить проверку пора завершать делаем }}Однако производит совершает ввода вывода Соответственно выполнен read Чтобы закончить воспользоваться interrupt инициирована исключительная выполнял блокирующую исключительной nio channels closedbyinterruptexception равно полезно флаг отличать прервана остановка задержка sleep усыпляет заданное миллисекундах останавливать правильным задержкой послать сон timer final delay=1000; секунда delay ждём сигнала terminate устанавливаем посылаем сигнал }}Хотя легковесным ресурсом особенно ядра периодически неэффективно создавать пул Идея проста вместо заводим число момента понадобятся завершается попадает свободных задания ** Пул threadpool Получить пула getinstance theinstance; повторного pooledthread next; ready; используемый нового done; сигнализации busy; флажок отмечающий занят donenotificationneeded; нибудь task; pool; ready готовимся ожиданию pool closed проверяем закрыт done busy закончили начатую предыдущей итерации donenotificationneeded работы… пошлём task null получили… выполняем else break; иначе завершаем wakeup задание readу занятости t; свободному waitcompletion throws завершилось… запускаем демона выходе Найти свободный @param реализующий @return выделенный методе thread; списком нужна availablethreadlist пуст nactivethreads maxthreads достигнуто ограничение максимальное deficit задачи освободится стартует готов получению null; availablethreadlist; увеличит активных Дождаться возвращённый next добавить уменьшить счётчика уведомления… освободился Закрытие Подождать окончания завершить свободные close ставим прекращения активные нуждаемся уведомлении завершение исключаем Конструктор ограничением работающих maxthreads; неограниченным числом integer max value nactivethreads; deficit; заинтересованных получении closed; theinstance ;}Обратите посылаются оптимизация дополнительной избежать лишних Практические потоковРассмотрим реальных простых буду рассматривать j2me мобильных встроенных устройств причине простоты midp способы отличаются платформ реализуем научный калькулятор графики функций вычислить функции точках указанного интервала заданным шагом Их довольно вычисление слабеньком процессоре мобильного телефона занимать стороны вычислили точек сможем максимум минимум интервале коэффициент вертикального масштабирования графика график поместился Подождите минуточку заняться вычислениями хорошее решение вычислений звонят телефон знает сколько ему осталось знал построен через час остановил задал интервал шаг Ясно должно производится остальной import javax microedition lcdui *;import midlet *;public plot form commandlistener runnable{ calculator calculator; gauge progressindicator; градусник stringitem completed; сюда записывать строчку процентом float from; начальная точка till; конечная dx; float[] values; заносить вычисленные значения percent; делаться running; нужный аварийной compiler functionexpression f; вычисляемая plotexpression expr screenwidth super from evaluate bindings till dx step sub div tolong showalert alerttype error bad interval return; values float[n]; 0; progressindicator progress indicator completed 0% append setcommandlistener addcommand cmd display getdisplay setcurrent for length; n; i++ arguments[0] x; вычисляем очередной точке values[i] newpercent i*100 обновляем индикаторы прогресса изменении процента percent setvalue newpercent; settext tostring add compileerror getmessage рисуем была команда graph commandaction command displayable mainmenu рассмотрим простейшей игрушки определённости назовём НЛО перемещаться экрану заданной скоростью Рисование переопределённом paint graphics canvas инициировать repaint попросить перерисовать какую область экрана ползёт прямоугольник стираем старый образ новые координаты новом Осталась самая малость периодом определяемым движения вызывать простое util timer;import timertask;public gamecanvas gametask timertask перерисовку game перерисовки уровня settings level*max levels; создаём таймер котрый запускаться таймером игру нулевой интервалом schedule приостановить cancel long 1000; timer; delay;}Следует реализован задержку ЗаключениеВозможно прочтения главы возникло чувство многопоточность опасная штука Создание действительно похоже сейчас обойтись плохо Серьёзные управлением основном сложных достижения максимальной маштабируемости приходится бороться распараллеливание этапов вашем приложении фоновом встретитесь описанных будьте бдительны коварные Java resource process debug synchronization отладка " />
+<meta name="MSSmartTagsPreventParsing" content="TRUE" />
+
+</head>
+
+<body bgcolor="white" topmargin="7" marginheight="7" leftmargin="7" marginwidth="7">
+
+<!-- banner -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" bgcolor="#609FBF">
+
+	<tr valign="top" nowrap>
+		<td align="center" nowrap><script language="JavaScript">
+<!--
+
+var haveFlash = (navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"]) ? navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin : 0;
+
+if( haveFlash ){
+        haveFlash = (parseInt(haveFlash.description.substring(haveFlash.description.indexOf(".")-1))>=5);
+} else if ( navigator.userAgent && navigator.userAgent.indexOf( "MSIE" ) >=0
+       && ( parseFloat( navigator.appVersion )  >=4)
+       && ( navigator.userAgent.indexOf( "Windows 95" ) >=0
+         || navigator.userAgent.indexOf( "Windows NT" ) >=0
+         || navigator.userAgent.indexOf( "Windows 98" ) >=0 )
+    ){
+        document.write('<SCR' + 'IPT LANGUAGE=VBScript\> \n');
+        document.write(' on error resume next \n');
+        document.write(' haveFlash = (IsObject(CreateObject("ShockwaveFlash.ShockwaveFlash.5")))\n');
+        document.write('</SCR' + 'IPT\> \n');
+}
+
+if ( haveFlash ){
+        document.write('<object classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000 codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0 width=80 height=80 hspace="3" vspace="3">');
+        document.write('<param name="movie" value="/i/docs.swf"><param name="menu" value="false"><param name="quality" value="high"><param name=bgcolor value=#FFFFFF>');
+        document.write('<EM' + 'BED src="/i/docs.swf" quality=high ');
+        document.write('menu=false swLiveConnect=FALSE WIDTH=80 HEIGHT=80');
+        document.write('TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" hspace="3" vspace="3">');
+        document.write('</EMBED>');
+        document.write(' </object>');
+}else{
+	document.write('<a href="http://www.juga.ru/"><img src="/i/docs.gif" width="80" height="80" border="0" hspace="3" vspace="3" /></a>');
+}
+//-->
+</script><noscript><a href="http://www.juga.ru/"><img src="/i/news.gif" width="80" height="80" border=0></a></noscript><img src="/i/h_lib.gif" height="29" border="0" vspace="6" hspace="10" /></td>
+		<td align="center" bgcolor="white"><img src="/i/0.gif" width="3" height="1" border="0" /></td>
+		<td align="center" width="90%" valign="middle"><script language='JavaScript' type='text/javascript' src='http://ads.i-rs.ru/adx.js'></script>
+<script language='JavaScript' type='text/javascript'>
+<!--
+   if (!document.phpAds_used) document.phpAds_used = ',';
+   phpAds_random = new String (Math.random()); phpAds_random = phpAds_random.substring(2,11);
+   
+   document.write ("<" + "script language='JavaScript' type='text/javascript' src='");
+   document.write ("http://ads.i-rs.ru/adjs.php?n=" + phpAds_random);
+   document.write ("&amp;what=zone:1");
+   document.write ("&amp;exclude=" + document.phpAds_used);
+   if (document.referrer)
+      document.write ("&amp;referer=" + escape(document.referrer));
+   document.write ("'><" + "/script>");
+//-->
+</script><noscript><a href='http://ads.i-rs.ru/adclick.php?n=a2999697' target='_blank'><img src='http://ads.i-rs.ru/adview.php?what=zone:1&amp;n=a2999697' border='0' alt=''></a></noscript></a></td>
+		<td align="center" rowspan="3" bgcolor="white"><img src="/i/0.gif" width="3" height="1" border="0" /></td>
+		<td width="150" rowspan="3" bgcolor="#BF2626">
+			<table border="0" cellpadding="0" cellspacing="0" align="center">
+				<tr>
+
+					<td><table border="0" cellpadding="0" cellspacing="0" align="center">
+							<tr><td><img src="/i/0.gif" width="150" height="3" border="0" /></td></tr>
+							<tr>
+								<td align="right">
+									<table border="0" cellpadding="0" cellspacing="1" align="center" width="145">
+
+										
+									</table>
+															</td>
+						</tr>
+					</table></td>
+				</tr>
+			</table></td>
+
+	</tr>
+	<tr valign="bottom"><td colspan="3">
+	<!-- host navigation -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#292A33">
+	<tr>
+		<td colspan="21" bgcolor="white"><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+	</tr>
+
+	<tr nowrap valign="middle">
+		<td><img src="/i/0.gif" width="5" height="1" border="0" /></td>
+
+		<td><a href="http://lib.juga.ru/" class="hostnavigation_current">&nbsp;Library&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" />|<img src="/i/0.gif" width="5" height="1" border="0" /></td>
+
+		<td><a href="http://news.juga.ru/" class="hostnavigation">&nbsp;News&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" />|<img src="/i/0.gif" width="5" height="1" border="0" /></td>
+		
+		<!--td><a href="http://best.juga.ru/" class="hostnavigation">&nbsp;Best&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" />|<img src="/i/0.gif" width="5" height="1" border="0" /></td-->
+		
+		<!--td><a href="http://bolero.juga.ru/" class="hostnavigation">&nbsp;Bolero&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" />|<img src="/i/0.gif" width="5" height="1" border="0" /></td-->
+		
+		<td><a href="http://dev.juga.ru/" class="hostnavigation">&nbsp;Hosting&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" />|<img src="/i/0.gif" width="5" height="1" border="0" /></td>
+
+		<td><a href="http://rating.juga.ru/" class="hostnavigation">&nbsp;Rating&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" />|<img src="/i/0.gif" width="5" height="1" border="0" /></td>
+		
+		<td><a href="http://list.juga.ru/" class="hostnavigation">&nbsp;Catalogue&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" />|<img src="/i/0.gif" width="5" height="1" border="0" /></td>
+		
+		<td><a href="http://forum.juga.ru/" class="hostnavigation">&nbsp;Forum&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" />|<img src="/i/0.gif" width="5" height="1" border="0" /></td>
+		
+
+		<td><a href="http://about.juga.ru/" class="hostnavigation">&nbsp;About&nbsp;</a></td>
+		<td class="hostnavigation"><img src="/i/0.gif" width="5" height="1" border="0" /><img src="/i/0.gif" width="5" height="1" border="0" /></td>
+		
+		<td width="99%"><img src="/i/0.gif" width="1" height="20" border="0" /></td>
+	</tr>
+
+</table>
+<!-- /host navigation -->
+
+
+	</td></tr>
+</table>
+
+<!-- /banner -->
+
+
+<!-- spacer -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+	</tr>
+</table>
+<!-- /spacer -->
+
+<table border="0" cellpadding="3" cellspacing="0" width="100%">
+   <tr valign="top">
+	      <td bgcolor="#A8B0BF" height="100%"><table  border="0" cellpadding="0" cellspacing="0" height="100%" bgcolor="white">
+	<tr valign="top">
+    <td width="1%" bgcolor="#ffffff">
+<!-- Left menu start -->
+    <table width="100%" cellspacing="0" cellpadding="2" border="0">
+<tr>
+   <td>
+<form action="/article/search/" method="get" style="margin-top: 0px; margin-bottom: 0px; padding: 0px;">
+<table border="0" cellpadding="0" cellspacing="1" align="center" bgcolor="#609FBF">
+<tr><td colspan="2"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+<tr>
+<td width="99%" align="center">
+<input type="text" name="SearchText" style="height:18; width:90; font-size:10px" size="10" />
+</td>
+<td><input type="submit" value="Find!" style="height:18; font-size:10px" name="Search"/>&nbsp;</td>
+</tr>
+<tr><td colspan="2"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+</table>
+<input type="hidden" name="SectionIDOverride" value="1" />
+</form>
+   </td>
+</tr>
+</table>
+
+<table  border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="white">
+<tr><td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+</table>
+   
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tr>
+		<td colspan="3"><table border="0" cellpadding="0" cellspacing="0" align="right">
+
+							<tr><td colspan="2"><img src="/i/0.gif" width="1" height="6" border="0" /></td></tr>
+		 	<tr>
+				<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+				<td class="menuhead">Содержание</td>
+		 	</tr>
+			<tr>
+				<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+				<td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+
+			</tr>
+		 </table></td>
+	</tr>
+<tr><td colspan="3"><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+
+
+<tr>
+	 		<td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+	      <td align="right"><a href="/article/archive/76" class="menuitem">Конкурсы</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+		</tr>
+<tr>
+
+	 	<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+	 	<td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+	 		<td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+	      <td align="right"><a href="/article/archive/4" class="menuitem">Java, первое знакомство</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+		</tr>
+<tr>
+
+	 	<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+	 	<td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+	 		<td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+	      <td align="right"><a href="/article/archive/64" class="menuitem">За и Против</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+		</tr>
+<tr>
+
+	 	<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+	 	<td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+	 		<td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+	      <td align="right"><a href="/article/archive/16" class="menuitem">J2ME</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+		</tr>
+<tr>
+
+	 	<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+	 	<td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+	 		<td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+	      <td align="right"><a href="/article/archive/22" class="menuitem">J2EE</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+		</tr>
+<tr>
+
+	 	<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+	 	<td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+	 		<td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+	      <td align="right"><a href="/article/archive/5" class="menuitem">J2SE</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+		</tr>
+<tr>
+
+	 	<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+	 	<td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+	 		<td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+	      <td align="right"><a href="/article/archive/14" class="menuitem">Справочники</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+		</tr>
+<tr>
+
+	 	<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+	 	<td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+
+
+	<tr>
+		<td colspan="3">
+		<table border="0" cellpadding="0" cellspacing="0" align="right">
+
+							<tr><td colspan="2"><img src="/i/0.gif" width="1" height="26" border="0" /></td></tr>
+		 	<tr>
+				<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+				<td class="menuhead">Навигация</td>
+		 	</tr>
+			<tr>
+				<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+				<td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+
+			</tr>
+		 </table></td>
+	</tr>
+<tr><td colspan="3"><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+
+<tr>
+         <td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+         <td nowrap align="right"><a href="/article/frontpage/1" class="menuitem">Главная страница</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+      </tr>
+<tr>
+      <td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+      <td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+         <td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+         <td align="right"><a href="/article/archive/0/" class="menuitem">Последняя статья</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+      </tr>
+<tr>
+      <td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+      <td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+         <td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+         <td align="right"><a href="/article/articleheaderlist/0/" class="menuitem">Архив статей</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+      </tr>
+<tr>
+      <td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+      <td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+         <td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+         <td align="right"><a href="/article/author/list" class="menuitem">Авторы статей</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+      </tr>
+<tr>
+      <td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+      <td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+<tr>
+         <td width="99%"><img src="/i/0.gif" width="1" height="18" border="0" /></td>
+         <td align="right"><a href="/article/index" class="menuitem">Глоссарий</a></td><td><img src="/i/0.gif" width="6" height="1" border="0" /></td>
+      </tr>
+<tr>
+      <td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+      <td bgcolor="#A8B8BF" colspan="2"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+</tr>
+
+
+
+
+</table>
+
+<br />
+<table  border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="white">
+<tr><td bgcolor="white"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+<tr><td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+</table>
+
+    <table border="0" cellpadding="0" cellspacing="0" align="right">
+	<tr><td colspan="2"><img src="/i/0.gif" width="1" height="6" border="0" /></td></tr>
+	<tr>
+		<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+		<td class="menuhead">Обновления</td>
+	</tr>
+	<tr>
+		<td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+		<td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+	</tr>
+</table>
+<br />
+<br />
+
+<table width="100%" cellspacing="0" cellpadding="3" border="0">
+
+
+<!-- BEGIN path_item_tpl -->
+
+<!-- END path_item_tpl -->
+
+<!-- BEGIN category_list_tpl -->
+
+<!-- BEGIN category_item_tpl -->
+
+<!-- END category_item_tpl -->
+
+<!-- END category_list_tpl -->
+
+
+
+
+
+<tr>
+	<td align="right">
+
+<a class="menutext" href="/article/articleview/229/1/0">Базовые профили J2ME</a>
+	<font class="small" align="right">
+	(06.10.2006)
+	</font>
+	</td>
+</tr>
+<tr><td><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+<tr>
+	<td align="right">
+
+<a class="menutext" href="/article/articleview/228/1/0">Первый в истории JetBrains конкурс плагинов к IntelliJ IDEA. Призовой фонд - $25000</a>
+	<font class="small" align="right">
+	(05.09.2006)
+	</font>
+	</td>
+</tr>
+<tr><td><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+<tr>
+	<td align="right">
+
+<a class="menutext" href="/article/articleview/227/1/0">IBM WebSphere Community Edition Contest 2006!</a>
+	<font class="small" align="right">
+	(10.08.2006)
+	</font>
+	</td>
+</tr>
+<tr><td><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+<tr>
+	<td align="right">
+
+<a class="menutext" href="/article/articleview/226/1/0">Управление подсветкой экрана из мидлета</a>
+	<font class="small" align="right">
+	(17.05.2006)
+	</font>
+	</td>
+</tr>
+<tr><td><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+<tr>
+	<td align="right">
+
+<a class="menutext" href="/article/articleview/225/1/0"> Введение в Java Server Faces</a>
+	<font class="small" align="right">
+	(01.02.2006)
+	</font>
+	</td>
+</tr>
+<tr><td><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+<tr>
+	<td align="right">
+
+<a class="menutext" href="/article/articleview/224/1/0">Работаем с JAR-архивами.</a>
+	<font class="small" align="right">
+	(29.12.2005)
+	</font>
+	</td>
+</tr>
+<tr><td><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+<tr>
+	<td align="right">
+
+<a class="menutext" href="/article/articleview/223/1/0">Указатели и виртуальные функции в Java</a>
+	<font class="small" align="right">
+	(27.10.2005)
+	</font>
+	</td>
+</tr>
+<tr><td><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+<tr>
+	<td align="right">
+
+<a class="menutext" href="/article/articleview/222/1/0">Пример использования XPFE/J2EE и SOAP для построения распределенных приложений</a>
+	<font class="small" align="right">
+	(19.08.2005)
+	</font>
+	</td>
+</tr>
+<tr><td><img src="/i/0.gif" width="1" height="5" border="0" /></td></tr>
+</table>
+
+
+
+
+
+   
+   
+   <!-- Left menu end -->
+
+   <img src="/images/1x1.gif" width="144" height="8" border="0"><br />
+   </td>
+</tr>
+
+</table></td>
+	<td><img src="/i/0.gif" width="3" height="1" border="0" /></td>
+<td width="99%">
+         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="position: relative; top: -3px;">
+            <tr><td bgcolor="#609FBF"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+         </table>
+<!-- Main content view start -->
+
+   
+
+                  
+
+<a class="path" href="/article/archive/0/">Главная</a>
+
+
+<img src="/images/path-slash.gif" height="10" width="16" border="0" alt="">
+<a class="path" href="/article/archive/76/">Конкурсы</a>
+<img src="/images/path-slash.gif" height="10" width="16" border="0" alt="">
+<a class="path" href="/article/archive/66/">Конкурс JUGA.RU</a>
+<img src="/images/path-slash.gif" height="10" width="16" border="0" alt="">
+<a class="path" href="/article/archive/67/">Конкурсные работы (25)</a>
+<img src="/images/path-slash.gif" height="10" width="16" border="0" alt="">
+<a class="path" href="/article/archive/68/">Java Технологии (15)</a>
+
+<hr noshade="noshade" size="1" />
+<br />
+
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+	<td>
+	<h1>Создание многопоточных приложений в Java</h1>
+	</td>
+	<td>
+	
+
+	</td>
+</tr>
+</table>
+
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+	<td>
+	<p class="byline">Автор: <a class="byline" href="/article/author/view/29">Константин Книжник</a></p>
+	</td>
+	<td align="right">
+	<p class="byline">Дата публикации: 09.12.2003 05:53</p>
+	</td>
+</tr>
+</table>
+<br />
+
+
+<a class="path" href="/article/topiclist/2">Java</a>
+
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+	<td>
+	
+
+<br clear="all"><table width="80" align="left" border="0" cellspacing="0" cellpadding="4">
+<tr>
+<td>
+   
+   
+   <a target="" href="/article/articleview/166/1/68">
+   <img src="/ezimagecatalogue/catalogue/attFjHsu2.gif" border="0" width="80" height="80" alt="" />
+   </a>   
+   
+</td>
+</tr>
+
+</table><br>
+Параллельные вычисления в настоящее время являются одной из самых приоритетных задач в области информатики. Если посмотреть на список TOP 100 (самые быстродействующие компьютеры в мире), легко заметить, что вся верхушка списка занята системами с массовым параллелизмом, состоящим из нескольких сотен, а то и тысяч процессорных блоков. Основная проблема заключается в том, что собрать такую систему зачастую оказывается проще, чем использовать, т.к. реализовать алгоритм, который будет эффективно распараллеливать свою работу на сотнях имеющихся в наличии вычислительных блоках, очень непросто. А от не адаптированного алгоритма толку на подобном суперкомпьютере не будет – скорость его выполнения будет не намного выше, чем на обычном PC. 
+	</td>
+</tr>
+</table>
+<br />
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+	<td>
+	
+<h2>1. Зачем это нужно?</h2>Параллельные вычисления в настоящее время являются одной из самых приоритетных задач в области информатики. Если посмотреть на список TOP 100 (самые быстродействующие компьютеры в мире), легко заметить, что вся верхушка списка занята системами с массовым параллелизмом, состоящим из нескольких сотен, а то и тысяч процессорных блоков. Основная проблема заключается в том, что собрать такую систему зачастую оказывается проще, чем использовать, т.к. реализовать алгоритм, который будет эффективно распараллеливать свою работу на сотнях имеющихся в наличии вычислительных блоках, очень непросто. А от не адаптированного алгоритма толку на подобном суперкомпьютере не будет – скорость его выполнения будет не намного выше, чем на обычном PC.<br>
+<br>
+Но программирование суперкомпьютеров и создание эффективных параллельных алгоритмов – это отдельная и очень сложная тема. Ей посвящено множество научных исследований, имеется большое количество интересных статей и книг. Правда, следует признать, что эффективного и простого способа создания параллельных программ до сих пор не существует. В этой статье мы затронем другую тему – использование параллелизма в обычных приложениях.<br>
+<br>
+Ещё несколько лет назад создатели прикладных программ вполне обходились без параллелизма на уровне приложения. Как устроена типичная простая программа под Windows – есть цикл обработки событий (event loop), внутри которого реализована вся логика взаимодействия программы с пользователем. Нажал пользователь клавишу Enter – программе пришло соответствующее событие и вызвалась функция-обработчик для этого события. Эта функция выполнила некоторые действия (например, сохранила введённые пользователем данные и вывела на экран новую форму) и вернула управление в основной цикл. После чего программа ждёт прихода следующего события. Всё просто, красиво, удобно для программирования и… неудобно для пользователя. Дело в том, что не все операции программа может выполнить мгновенно. Например, копирование файла на дискетку занимает достаточно много времени. Поскольку в это время программа не готова к приёму следующих событий, она просто не реагирует на действия пользователя. Максимум, что можно сделать – это сменить тип курсора на часики и вывести окошко с сообщением: "подождите минутку". А зачастую пользователю остаётся только гадать – "зависла" программа или всё-таки она что-то делает и стоит немного подождать (опытные пользователи способны определить это по «косвенным признакам» - загрузке CPU, активности диска…). А в чём заключается причина проблемы? В том, что программа не в состоянии выполнять параллельно две операции: копирование файла и обработку пользовательских событий.<br>
+<br>
+Другой пример. Рассмотрим создание сёрверных приложений. Классический сценарий - с каждым клиентом сёрвер устанавливает соединение по сокету (socket); с помощью системного вызова select программа определяет, по какому из сокетов получены данные. Дальше - цикл, который вызывает подпрограмму-агента для обработки запроса от данного клиента. Структура программы получается достаточно простой, но проблемы возникают и здесь. Во-первых, проблема с эффективным использованием ресурсов сёрвера: пока выполняется один запрос, остальные ждут. Во-вторых, если выполнение запроса требует много времени, то время реакции сёрвера оказывается неприемлемым. Не удаётся равномерно загрузить все ресурсы сёрвера и за счёт этого повысить производительность. Если обработчик запроса, например, читает данные с диска, то CPU при этом обычно простаивает, а хотелось бы использовать его для обработки других запросов, не требующих доступа к диску.<br>
+<br>
+Другая проблема связана с тем, что часто для клиента необходимо помнить контекст, т.е. обработка текущего запроса клиента зависит от результата предыдущих запросов. В принципе ничего страшного в этом нет: мы можем завести специальную структуру данных и запоминать состояние для каждого клиента. Получается этакий конечный автомат, рёбра которого соответствуют приходящим от клиента запросам. Конечный автомат – очень гибкий и мощный механизм, только вот программировать его – занятие не из приятных. Приходится постоянно помнить, кто у нас в каком состоянии и куда он потом может попасть. Опять таки сохранение и получение текущего состояния не способствует компактности и простоте кода программы. Было бы гораздо проще, если бы с каждым клиентом был связан отдельный поток, в котором хранятся все данные этого клиента и который может выполняться параллельно с потоками для других клиентов.<br>
+
+<h2>2. Параллелизм с точки зрения ОС</h2>Параллельные программы появились достаточно давно. Даже такие примитивные системы как MS-DOS, были способны параллельно выполнять несколько программ. Конечно, если в машине всего один процессор, то полного параллелизма, конечно, достичь не удастся. Процессор в каждый момент времени может выполнять команды только одной программы. Тут уже задача операционной системы обеспечить правильное планирование выполнения различных программ, так чтобы и различные устройства (диск, процессор) использовались эффективно, и каждой программе «честно» бы выделялся свой квант времени.<br>
+<br>
+Классический алгоритм планирования выполнения программ использует одну или несколько очередей с задачами, готовыми к выполнению. Каждой задаче назначается свой приоритет выполнения. Обычно интерактивным задачам (задачам, взаимодействующим с пользователями) следует назначать более высокий приоритет по сравнению с преимущественно вычислительными задачами. Также высокий приоритет нужен критичным по времени задачам, таким, как управление записью на компакт диск или проигрыватель музыки. Приоритет программы может меняться в процессе работы – давно находящейся в режиме ожидания задаче можно поднять приоритет, а активно выполняющейся – наоборот снизить. Это способствует более «честному» планированию задач и быстрой реакции на команды пользователя. Планировщик задач выбирает задачу из начала списка наиболее высокоприоритетных задач, выделяет ей квант времени для выполнения и передаёт ей управление. Далее возможно следующее:<br>
+
+<ul>
+	
+	<li>
+	Программа полностью отрабатывает свой квант времени. Тогда планировщик заносит её в конец списка готовых к выполнению задач и выбирает для выполнения следующую задачу с наибольшим приоритетом. 
+	</li>
+	<li>
+	Программа инициирует операцию, которая не может быть немедленно выполнена (например, чтение с диска). В этом случае планировщик переносит задачу в список ждущих задач и выбирает следующую, готовую для выполнения. По окончании операции задача будет опять помещена в список готовых к выполнению. 
+	</li>
+	<li>
+	Происходит системное прерывание или появляется задача с большим приоритетом, готовая к выполнению. Планировщик определяет, может ли программа продолжить работу или следует запустить более высокоприоритетный процесс. 
+	</li>
+</ul><br>
+Подобная схема ещё называется «преимущественной многозадачностью» (preemptive multitasking). При такой схеме никакая задача не может полностью блокировать выполнение задач с таким же или большим приоритетом. Некоторые старые ОС (например, Windows 95) имели более простую в реализации модель параллелизма (называемую «не выталкивающей многозадачностью»), когда перепланирование процессов происходит только при желании активного процесса. Т.е. задача должна сама информировать ОС, что её можно прервать. Естественно не правильно работающая программа при такой схеме может полностью блокировать работу системы, что и является следствием гораздо менее стабильной работы Win 95, по сравнению, например, с семейством Windows NT.<br>
+
+<h2>3. Поток – что это такое?</h2>Итак, параллельные процессы используются уже достаточно давно. Почему же их нельзя использовать для решения наших задач? Ответ: можно, но неудобно. Дело в том, что процесс представляет собой достаточно замкнутую систему. У процесса есть своя память (команд и данных), свой стек, свои дескрипторы для доступа к файлам и другим устройствам и т.д. При этом средства взаимодействия процессов между собой достаточно ограничены предоставляемым ОС API. Обычно средства межпроцессорного взаимодействия включают в себя очереди для обмена сообщениями между процессами, разделяемую память (shared memory) и синхронизационные примитивы: семафоры, события, критические секции. Т.е. если вы хотите выполнить фоновое сохранение данных на диск, вам нужно будет создать новый процесс, использовать один из существующих механизмов межпроцессорного взаимодействия (IPC) для передачи этому процессу имени файла и данных, которые должны быть сохранены, после этого, опять-таки с использованием IPC, получить от процесса уведомление о завершении операции. В общем, простейшая операция выливается во множество строчек кода.<br>
+Проблема ещё состоит в том, что, так как с процессом связано достаточно много данных, то и порождение процесса и переключение контекста процессов представляет собой достаточно трудоёмкую операцию. Таким образом, использовать различные процессы для распараллеливания работы можно только если эти работы слабо связаны с друг другом. В этом случае процессы могут работать почти независимо друг от друга. Если же для выполнения необходим интенсивный обмен данными, то накладные расходы от межпроцессного взаимодействия и переключения контекстов часто оказываются настолько большими, что всякий выигрыш от параллельной работы процессов теряется.<br>
+<br>
+Поэтому не удивительно, что почти во всех современных операционных системах поддерживаются облегчённые процессы или потоки (threads). На самом деле реализации потоков в разных ОС может существенно отличаться. Но мы не будем здесь заострять на этом внимание. Определим поток как самостоятельную активность внутри процесса. Поток имеет свой стек, но не имеет своей собственной памяти. Вместо этого все потоки в процессе разделяют общую память (т.е. один поток может получить доступ к данным другого потока). Это значительно упрощает передачу данных между потоками (механизм передачи данных ничем не отличается от передачи параметров в подпрограмму). Но при этом, в отличие от процесса, данные которого изолированы от других процессов, данные потока могут быть изменены любым другим потоком, что, конечно, требует повышенного внимания при программировании многопоточных приложений и аккуратного использования синхронизации (об этом позже).<br>
+<br>
+За счёт того, что у потока гораздо меньше собственных ресурсов, чем у процесса, создание потока требует гораздо меньше времени, чем запуск процесса. Также переключение контекста между различными потоками в рамках одного процесса выполняется гораздо быстрее, чем переключение между различными процессами (все потоки внутри одного процесса имеют общую память, поэтому при переключении контекста не надо менять таблицу отображения страниц).<br>
+<br>
+Планирование выполнения потоков система осуществляет точно так же, как планирование процессов. Точнее, во многих операционных системах, поддерживающих потоки, единицей планирования является именно поток, а не процесс. Важно отметить, что операционная система способна организовать параллельное выполнение потоков: либо распределением потоков по различным процессорным устройствам (на многопроцессорной машине), либо используя перепланировку по истечении отведённого потоку кванта времени. В обоих случаях надо быть готовым к тому, что выполнение потока может быть прервано в любой момент и управление передано другому потоку (это не совсем так – есть понятие атомарной, т.е. неделимой операции, но какая операция атомарная, а какая нет, зависит от архитектуры системы, используемого языка, типа данных и даже опций компилятора, по этому мы не будем здесь это обсуждать).<br>
+
+<h2>4. Потоки в Java – как всё просто!</h2>Механизм потоков в Java использует усовершенствованную схему мониторов Хоара. Потоку соответствует класс java.lang.Thread. Для создания своего потока можно либо вывести свой класс из Thread, либо реализовать интерфейс Runnable. И в том, и в другом случае необходимо реализовать собственный метод run(), который, собственно, и будет выполнять нужное действие. Запустить поток на выполнение можно методом start(). Если необходимо дождаться завершения потока, надо использовать метод join(). Ниже приведены примеры для двух способов создания потока:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> MyThread <b>extends</b> <font color="darkblue"><b>Thread</b></font> {
+  <b>public</b> <b>void</b> run() {
+    System.out.println("<font color="blue">Thread is running</font>");
+  }
+}
+
+<b>public</b> <b>static</b> <b>void</b> main(<font color="darkblue"><b>String</b></font> args[]) {
+  MyThread thread <font color="red">=</font> <b>new</b> MyThread();
+  thread.start();
+  <b>try</b> {
+    thread.join();
+  } <b>catch</b> (<font color="darkblue"><b>InterruptedException</b></font> x) {}}</pre></td></tr></table></p><br>
+или<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> MyActivity <b>implements</b> <font color="darkblue"><b>Runnable</b></font> {
+  <b>public</b> <b>void</b> run() {
+    System.out.println("<font color="blue">Thread is running</font>");
+  }
+}
+
+<b>public</b> <b>static</b> <b>void</b> main(Strnig args[]) {
+  MyActivity myActivity <font color="red">=</font> <b>new</b> MyActivity();
+  <font color="darkblue"><b>Thread</b></font> thread <font color="red">=</font> <b>new</b> <font color="darkblue"><b>Thread</b></font>(myActivity);
+  thread.start();
+  <b>try</b> {
+    thread.join();
+  } <b>catch</b> (<font color="darkblue"><b>InterruptedException</b></font> x) {}
+}</pre></td></tr></table></p><br>
+А что будет, если не дожидаться завершения потока? Программа будет активна, пока работает по крайней мере один поток. Т.е., другими словами, программа ждёт завершения всех запущенных потоков. Иногда это не нужно. В этом случае надо пометить поток как «демон» с помощью метода setDaemon(true). Завершения "демонов" программа не дожидается и просто их останавливает. Вызвать setDaemon метод нужно до запуска потока.<br>
+Ну, хорошо – потоки мы запускать научились. Всё – задача решена? Нет, на самом деле это только начало. Как мы уже говорили, все потоки разделяют общую память. Посмотрим, чем это чревато. Допустим, мы пишем банковскую систему для обслуживания банкоматов, и у нас есть метод, который проверяет, достаточно ли у клиента денег на счету и, если да, снимает запрошенную сумму со счёта и даёт банкомату "добро" на выдачу денег:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> Account {
+  <b>private</b> <b>int</b> balance;
+
+  <b>public</b> <b>boolean</b> withdraw(<b>int</b> amount)  {
+    <b>if</b> (amount <font color="red">></font> balance) {
+      <b>return</b> <b>false</b>;
+    }
+    balance -= amount;
+    <b>return</b> <b>true</b>;
+  }
+}</pre></td></tr></table></p><br>
+Так как банкоматов у нас много, мы решаем реализовать параллельную обработку запросов и для этого используем потоки. Вроде бы всё прекрасно работает (в этом и заключается одна из основных проблем параллельного программирования – ошибки очень трудно воспроизводимы). Теперь давайте внимательно проанализируем код. Итак, метод withdraw() может параллельно выполняться несколькими потоками. Как мы уже отмечали, поток может быть прерван в любой момент времени. Поэтому возможет такой сценарий:<br>
+
+<ol>
+	
+	<li>
+	Имеется два потока П1 и П2, в которых вызывается метод withdraw() Пусть на счету находится сумма в 100уе, П1 запрашивает 80уе, а П2 – 60уе. 
+	</li>
+	<li>
+	Поток П1 проверяет условие (amount < balance). Оно истинно (80 < 100). 
+	</li>
+	<li>
+	Происходит перепланировка потоком, управление получает поток П2 
+	</li>
+	<li>
+	Поток П2 проверяет условие (amount < balance). Оно тоже истинно (60 < 100). 
+	</li>
+	<li>
+	Поток П2 уменьшает баланс на затребованную величину и возвращает true. Теперь баланс равен 40уе. 
+	</li>
+	<li>
+	Управление возвращается потоку П1. 
+	</li>
+	<li>
+	Он тоже уменьшает значение баланса и возвращает true. Баланс равен… -40уе! 
+	</li>
+</ol>Н-да, так с деньгами обращаться нельзя. Параллелизм - это конечно здорово, но целостность данных от этого страдать не должна. Кусок кода программы, в котором недопустимо влияние других потоков, называется критической секцией. В критическую секцию дозволено входить только одному потоку. Остальные будут ждать, пока этот поток не покинет критическую секцию. В языке Java для оформления критической секции предусмотрено ключевое слово synchronized(синхронизированный). Можно объявить синхронизированными как весь метод, так и отдельный блок операторов:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>boolean</b> <b>synchronized</b> withdraw(<b>int</b> amount)  {
+  <b>if</b> (amount <font color="red">></font> balance) {
+    <b>return</b> <b>false</b>;
+  }
+  balance -= amount;
+  <b>return</b> <b>true</b>;
+}</pre></td></tr></table></p><br>
+или<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>boolean</b> withdraw(<b>int</b> amount)  {
+  <b>synchronized</b>(<b>this</b>) {
+    <b>if</b> (amount <font color="red">></font> balance) {
+      <b>return</b> <b>false</b>;
+    }
+    balance -= amount;
+    <b>return</b> <b>true</b>;
+  }
+}</pre></td></tr></table></p><br>
+В данном случае оба способа эквивалентны. Первый представляется более удобным, а второй обеспечивает большую гибкость.<br>
+<br>
+Что означает аргумент this в конструкции synchronized(this)? В Java с каждым объектом неявно связан монитор – т.е. нечто, отвечающее за синхронизацию доступа к данному объекту. Вся синхронизация в Java осуществляется на уровне объектов. Т.е. внутри synchronized блока блокируется данный экземпляр объекта. Метод, помеченный как synchronized, осуществляет блокировку this объекта для методов экземпляра класса или блокировку самого класса для статических методов. Т.е объявляя метод как synchronized, мы говорим системе, что этот метод требует эксклюзивного доступа к объекту. И система гарантирует, что из всех синхронизированных участков кода, для каждого конкретного экземпляра объекта в каждый момент времени может выполняться только один такой участок. При этом:<br>
+<br>
+
+<ul>
+	
+	<li>
+	Синхронизированный метод может выполняться параллельно для разных объектов, например – метод withdraw может параллельно производить операции с различными счетами. 
+	</li>
+	<li>
+	Для одного экземпляра запрещено параллельное выполнение не только одного и того же синхронизированного метода, но и любых других методов и синхронизированных блоков, использующих данный экземпляр объекта. Например, если бы у нас в классе Account был синхронизированный метод deposit (положить деньги на счёт), то и он бы не мог выполняться параллельно с методом withdraw для данного счёта. 
+	</li>
+	<li>
+	Конструкция synchronized не препятствует параллельному выполнению методов, не отмеченных как синхронизированные. Т.е., если бы в нашем классе Account был метод deposit(), который мы забыли бы пометить как synchronized, то он вполне мог выполняться параллельно с методом withdraw(). Причём, последствия могли бы быть не менее печальными, чем при выполнении двух параллельных withdraw(). 
+	</li>
+</ul>Итак, мы научились предотвращать нежелательное влияние потоков друг на друга. Но этого ещё недостаточно. Часто хочется уметь оповещать другой поток, например, о готовности данных для него. И, соответственно, ждать прихода такого сообщения. Для этого в Java в классе Object предусмотрены методы wait, notify, notifyAll. Для использования этих методов поток должен быть эксклюзивным владельцем объекта, т.е. использовать эти методы для this объекта внутри метода, объявленного как synchronized, или внутри synchronized блока с этим объектом в качестве параметра. Эти методы работают следующим образом:<br>
+
+<ul>
+	
+	<li>
+	При выполнении метода wait система снимает блокировку с объекта и переводит поток в режим ожидания. 
+	</li>
+	<li>
+	При выполнении метода notify система переводит в точности один поток, ожидающий наступления данного события, в режим готовности. Если такого потока нет, то выполнение этого метода не имеет никакого эффекта. Следует заметить, что если наступления события ожидают несколько потоков, то будет выбран <b>любой</b> из них. При этом, для возврата из метода wait, потоку придётся конкурировать за доступ к данному объекту с другими потоками. Только установив вновь эксклюзивную блокировку объекта, ожидающий поток может вновь продолжить выполнение. 
+	</li>
+	<li>
+	При выполнении метода notifyAll пробуждаются все потоки, ждущие наступления данного события. 
+	</li>
+</ul>Кажется не совсем понятным, зачем требуется блокировать объект перед вызовом wait, чтобы потом wait снял эту блокировку и пытался установить её вновь после получения уведомления. Но это сделано для того, чтобы проверка условия и переход в режим ожидания выполнялись атомарно (не делимым образом). Обычно поток, ожидающий наступления какого-то события, проверяет переменную, связанную с этим событием. Если результат проверки отрицательный, то поток переходит в режим ожидания. Например, простейший класс "событие" (event), можно реализовать на Java следующим образом:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> AutoResetEvent { <font color="#2d807d">// событие с автосбросом</font>
+  <b>public</b> <b>synchronized</b> <b>void</b> waitEvent() {
+    <b>try</b> {
+      <b>while</b> (!signaled) { <font color="#2d807d">// ждать наступления события</font>
+        wait();
+      }
+      signaled <font color="red">=</font> <b>false</b>;
+    } <b>catch</b> (<font color="darkblue"><b>InterruptedException</b></font> x) {}
+  }
+
+  <b>public</b> <b>synchronized</b> <b>void</b> signalEvent() {
+    signaled <font color="red">=</font> <b>true</b>;
+    notify(); <font color="#2d807d">// пробудить спящий поток</font>
+  }
+
+  <b>private</b> <b>boolean</b> signaled;
+}</pre></td></tr></table></p><br>
+Обратите внимание, что проверка условия signaled делается в цикле. Это необходимо, т.к., после того как signaled был установлен в true методом signal и ждущий поток помещён в очередь готовых к выполнению процессов, поток, вызвавший wait, ещё не стал владельцем блокировки объекта. Поэтому, если в данный момент другой поток вызовет метод waitEvent, вполне может быть, что именно он завладеет блокировкой и продолжит выполнение. Так как переменная signaled имеет значение true, то этот поток не будет ждать, а сбросит signaled в false и продолжит выполнение. А поток, выполнивший wait и завладевший наконец блокировкой, обнаружит, что signaled сброшен. Поэтому он вынужден будет выполнить ещё одну итерацию цикла и опять ждать наступления следующего события.<br>
+<br>
+Следует также заметить, что метод wait снимает блокировку только с одного объекта (а именно с того, для которого был позван метод wait). Если вы заблокировали какие-либо еще объекты, то они так и останутся заблокированными на время, пока поток находится в состоянии ожидания. Возможно, вы того и хотели, но чаще всего это свидетельствует об ошибке в программе. Для повышения степени параллелизма (и, соответственно, производительности) и избежания тупиковых ситуаций следует устанавливать блокировки на как можно более короткий срок. Следующий пример иллюстрирует проблему:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> MyClass {
+  <b>void</b> <b>synchronized</b> foo(<font color="darkblue"><b>Object</b></font> <font color="blue">event</font>) {
+    <b>synchronized</b>(<font color="blue">event</font>) {
+      wait(<font color="blue">event</font>);
+    }
+  }
+}</pre></td></tr></table></p><br>
+В этом примере метод wait снимает блокировку с объекта event, но собственный объект (this) остаётся заблокированным.<br>
+<br>
+А вот пример реализации на Java события с ручным (явным) сбросом:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> ManualResetEvent { <font color="#2d807d">// событие с автосбросом</font>
+  <b>public</b> <b>synchronized</b> <b>void</b> waitEvent() {
+    <b>try</b> {
+      <b>while</b> (!signaled) { <font color="#2d807d">// ждать наступления события</font>
+        wait();
+      }
+    } <b>catch</b> (<font color="darkblue"><b>InterruptedException</b></font> x) {}
+  }
+
+  <b>public</b> <b>synchronized</b> <b>void</b> resetEvent() {
+    signaled <font color="red">=</font> <b>false</b>;
+  }
+
+  <b>public</b> <b>synchronized</b> <b>void</b> signalEvent() {
+    signaled <font color="red">=</font> <b>true</b>;
+    notifyAll(); <font color="#2d807d">// пробудить все спящие потоки</font>
+  }
+
+  <b>private</b> <b>boolean</b> signaled;
+}</pre></td></tr></table></p><br>
+И еще один пример - реализация семафора на Java. Семафор - это классический синхронизационный примитив, предложенный Э.В. Дейкстрой, который можно использовать для распределения некоторого ограниченного количества ресурсов. У классического семафора есть две операции P(занять ресурс) и V(освободить ресурс). Операция P проверяет счётчик доступных ресурсов и, если он больше нуля, то вычитает единицу и возвращает управление. В противном случае поток, выполняющий операцию P, блокируется до тех пор, пока счётчик не станет больше нуля. А операция V используется для оповещения о том, что ресурс потоку больше не нужен. При этом счётчик доступных ресурсов увеличивается на единицу.<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> Semaphore {
+  <b>public</b> <b>synchronized</b> <b>void</b> p() {
+    <b>while</b> (counter <font color="red">==</font> 0) {
+      wait();
+    }
+    counter -= 1;
+  }
+
+  <b>public</b> <b>synchronized</b> <b>void</b> v() {
+    counter += 1;
+    notify();
+  }
+}</pre></td></tr></table></p><br>
+Реализация потоков в Java зависит от используемой виртуальной машины. В некоторых случаях используется реализация потоков на библиотечном уровне. То есть всё управление потоками осуществляется внутри самой виртуальной машины без участия операционной системы. Такие потоки имеют наименьшие накладные расходы, так как для переключения контекста не требуется системных вызовов. Но такая реализация не позволяет использовать все имеющиеся ресурсы на многопроцессорной машине и параллельно выполнять несколько потоков. Кроме того, в большинстве случаев такая реализация использует не вытесняющую стратегию для перепланировки потоков. То есть, для того, чтобы управление было передано другому потоку, активный в данный момент поток должен сам захотеть этого (например, вызов блокирующего системного метода приводит к тому, что поток переводится в очередь ждущих потоков, а из очереди готовых к выполнению потоков выбирается новый поток). Поэтому большинство текущих реализаций виртуальных машин использует системные потоки (например, Win32 или pthread) для реализации над ними потоков Java.<br>
+<br>
+Вот, собственно, и всё - мы ознакомились с реализацией параллелизма в Java! Простота конструкций, используемых в Java для управления потоками, создаёт иллюзию, что написание многопоточных приложений ничуть не сложнее написания обычных приложений: расставил всюду synchronized, вставил где необходимо wait/notify, создал нужное количество потоков и всё - многопоточная программа готова. По сравнения с библиотеками, используемыми, например, в С++ для создания и управления потоками, в Java всё кажется простым и понятным. К сожалению, эта простота кажущаяся. Проблемы, возникающие при написании параллельных программ, никуда не исчезли и ждут своего часа. Но об этом в следующей главе.<br>
+
+<h2>5. Почему так сложно писать и, главное, отлаживать параллельные программы?</h2>Вернёмся немного назад. Как приходилось отлаживать программы на С/C++? "Гуляющие указатели", не инициализированные переменные, содержащие мусор, висящие ссылки и утечки памяти, не отлавливаемые выходы индекса за границу массива… Программа "грохающаяся" в непредсказуемом месте, потому что совсем в другом участке программы кто-то неправильно обошёлся с указателем. Программа то работающая, то не работающая (в зависимости от того, какой мусор встретился в памяти. Не даром для С++ создано столько всяких СodeGuardов и BoundsCheckerов. После этого ошибки в программах на языке Java кажутся чуть ли не самоустраняющимися - все переменные инициализированы, выход индекса за границу массива отслеживается и пресекается мгновенно, гуляющих и висячих указателей нет в принципе, как и утечек памяти. Программа ведёт себе абсолютно детерминированным образом - если она "сваливалась" на каком-то определённом наборе входных данных, то можно быть уверенным, что, будучи запущенной ещё раз с тем же набором данных, мы получим тот же самый результат. В общем, полное торжество защищённых программных систем и языков.<br>
+Но вот мы написали многопоточную программу. И что мы видим? Опять программа ведёт себя абсолютно непредсказуемым образом. Будучи отлажена, оттестирована и запущена 1000 раз, на тысячу первый она ни с того ни с сего виснет. Или ещё хуже - вдруг оказываются "испорченными" данные. Попытка воспроизвести ошибку ни к чему не приводит - программа отлично работает...до следующего падения. Случаются и не столь катастрофические, но не менее загадочные явления - программа, прекрасно работающая на однопроцессорной машине, на вдвое более мощной двухпроцессорной машине вдруг начинает работать на порядок (десятичный, а не двоичный) медленнее, чем на однопроцессорной. В общем, мы опять оказываемся в первобытном дремучем лесу отладки недетерминировано работающей программы. С той лишь разницей, что продуктов типа BoundsCheckerа для поиска ошибок в синхронизации очень мало, да и качество их работы оставляет желать лучшего.<br>
+<br>
+На самом деле, все ошибки, приводящие к неправильной работе многопоточного приложения можно разбить на два класса: конкурентный доступ (английский термин "race condition" не поддаётся разумному переводу) и взаимные блокировки. Ошибки первого рода являются следствием недостатка синхронизации, второго - её избытка (или неправильного применения).<br>
+<br>
+С ошибками первого рода мы уже сталкивались - пример с банковским счётом. Если два или больше потоков начинают одновременно изменять (или даже один изменяет, а другой только смотрит) одни и те же данные, то обычно ничего хорошего из этого не получается. Что же делать? Понаставить всюду synchronized? Во-первых, тогда весь выигрыш от многопоточности может испариться - если все объекты доступны только в эксклюзивном режиме, то работать в каждый момент времени сможет только один поток. А во вторых, чрезмерное и необдуманное использование блокировок приводит к проблемам второго рода - тупиковым ситуациям. Рассмотрим следующий пример:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> Pipe { <font color="#2d807d">// канал</font>
+  Queue src; <font color="#2d807d">// источник</font>
+  Queue dst; <font color="#2d807d">// приёмник</font>
+
+  <b>void</b> forward() { <font color="#2d807d">// переметить элемент из источника в приёмник</font>
+    <b>synchronized</b>(src) { <font color="#2d807d">// блокируем приёмник</font>
+      <b>synchronized</b>(dst) { <font color="#2d807d">// блокируем приёмник</font>
+        <font color="darkblue"><b>Object</b></font> elem <font color="red">=</font> src.dequeue(); <font color="#2d807d">// взять элемент из очереди src</font>
+        dst.enqueue(elem); <font color="#2d807d">// и поместить в очередь dst</font>
+      }
+    }
+  }
+
+  <b>void</b> backward() { <font color="#2d807d">// переместить элемент в обратном направлении –</font>
+    <font color="#2d807d">// из приёмника в источник</font>
+    <b>synchronized</b>(dst) { <font color="#2d807d">// блокируем приёмник</font>
+      <b>synchronized</b>(src) { <font color="#2d807d">//  блокируем приёмник</font>
+        <font color="darkblue"><b>Object</b></font> elem <font color="red">=</font> dst.dequeue(); <font color="#2d807d">// взять элемент из очереди dst</font>
+        src.enqueue(elem); <font color="#2d807d">// и поместить в очередь src</font>
+      }
+    }
+  }
+}</pre></td></tr></table></p><br>
+Допустим, что с данным классом параллельно работают несколько потоков. При этом возможен такой сценарий:<br>
+
+<ol>
+	
+	<li>
+	Поток П1 вызывает метод forward. 
+	</li>
+	<li>
+	В потоке П1 выполняется первый synchronized оператор и устанавливается блокировка src. 
+	</li>
+	<li>
+	В результате перепланировки потоков управление получает поток П2. 
+	</li>
+	<li>
+	Поток П2 вызывает метод backward. 
+	</li>
+	<li>
+	В результате выполнения метода backward в потоке П2 происходит блокирование объекта dst. 
+	</li>
+	<li>
+	Попытка блокировать объект src не удаётся, так как этот объект уже блокирован П1. Поток П2 переходит в режим ожидания. 
+	</li>
+	<li>
+	Управление вновь получает П1 и пытается блокировать dst. И эта попытка оканчивается неудачей, так как dst уже блокирован П2. Потоку П1 ничего не остаётся, как ждать...потока П2, который в свою очередь ждёт П1. Выйти из этой ситуации потоки не смогут. Поэтому она и зовётся тупиком. 
+	</li>
+</ol><br>
+В данном случае проблема решается достаточно просто: нужно, чтобы метод backward блокировал объекты в том же порядке, что и метод forward. Тупиковая ситуация при этом возникнуть не может. Этот простой прием, кстати, является одним из самых основных способов предотвращения тупиковых ситуаций - старайтесь всегда блокировать объекты в одном и том же порядке. Можно также ассоциировать с объектами-ресурсами приоритеты, и блокировать объекты в порядке убывания приоритета (иерархические блокировки). К сожалению, тупиковую ситуацию можно получить, даже если у вас есть один единственный метод с synchronized атрибутом. Рассмотрим следующий пример:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> SomeClass {
+  <b>void</b> <b>synchronized</b> foo(SomeClass a) {
+    ...
+    a.foo();
+    ...
+  }
+}</pre></td></tr></table></p><br>
+Теперь допустим, что у нас есть объекты класса SomeClass о1 и о2 и два потока П1 и П2, параллельно выполняющие следующие вызовы:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre>П1: o1.foo(o2);
+П2: o2.foo(o1);</pre></td></tr></table></p><br>
+C большой вероятностью этот код приведёт к взаимной блокировке: П1 блокирует о1, П2 блокирует о2 и оба будут ждать друг друга).<br>
+<br>
+Что же делать? Как научиться определять возможные блокировки и пытаться избегать их? К сожалению, Java компилятор нам тут ничем не поможет. Придётся брать в руки карандаш и бумагу (кто там говорил о скорой кончине последней?) и начинать рисовать граф блокировок. Вершинам в этом графе соответствуют объекты, которые могут быть заблокированы (объект синхронизации в synchronized блоке или экземпляр класса для synchronized метода). Конечно, этих объектов может быть неопределённо много (например, в случае synchronized метода, каждый экземпляр объекта данного класса может быть заблокирован). Для начала, представим все экземпляры класса одной вершиной. Итак, вершины мы нарисовали. Теперь внимательно изучаем код и ищем зависимости между объектами. Для этого строим граф вызовов, т.е. определяем, какие другие методы может позвать данный метод. Нужно построить замыкание этого отношения (т.е. иными словами учесть не только те методы, которые могут быть непосредственно позваны, но и методы, которые позовут эти методы, и.т.д.) Не забудьте учесть наследование - в общем случае вызов метода базового класса или интерфейса может привести к вызову метода любого выведенного класса, переопределяющего или реализующего данный метод. Граф вызовов для большой программы может получиться просто непотребно большим, поэтому лучше его не рисовать явно, а строить в уме. Но тут главное никого не забыть. После того, как мы выяснили, кто кого может позвать, проводим рёбра в нашем графе блокировок. Если внутри участка кода, блокировавшего объект "x", блокируется объект "y" или вызывается метод, который в свою очередь блокирует объект "y", то от вершины, помеченной "x", мы проводим ребро в вершину помеченную "y". Провели? Ну, значит, дело почти сделано. Теперь изучаем наш граф и ищем в нём циклы. Не нашли - поздравляю: возникновение тупиковой ситуации в вашей программе невозможно (если вы, конечно, не напутали что-то с графом). Нашли? - ну тут возможны варианты. Помните, что мы все экземпляры данного класса пометили одной единственной вершиной? Может так оказаться, что цикл, существующей в нашем графе на самом деле невозможен, потому что блокируются различные экземпляры объектов. Тут уже нужно более тонкое изучение, использующее семантику конкретной программы.<br>
+<br>
+Возникает вопрос: нельзя ли автоматизировать описанную выше процедуру, чтобы не рисовать сами граф карандашом, а предоставить построение графа и поиск циклов в нём программе. Ответ - да, можно. Хотя подобных продуктов существует не так уж много. Один из них Jlint написан мной и его можно свободно скачать с моего сайта <a href="http://www.garret.ru/~knizhnik" target="" >http://www.garret.ru/~knizhnik</a>.<br>
+<br>
+К сожалению, моя текущая работа в фирме Борланд тоже связана с верификацией кода, поэтому по соображениям корпоративной этики я прекратил дальнейшую разработку и совершенствование данного продукта. Ещё необходимо заметить, что реализовать описанный выше алгоритм не так просто, как кажется на первый взгляд. Для этого надо построить не просто граф вызовов, а контекстно-зависимый граф вызовов. А это в большом проекте может занять слишком много памяти и времени. Кроме того, из-за представления в графе всех экземпляров объектов одной вершиной, достаточно велик процент "белого шума" - т.е. ложных сообщений о блокировках, что делает даже анализ найденных циклов для большого проекта нетривиальной задачей.<br>
+<br>
+К счастью, в отличие от конкурентного доступа, тупиковая ситуация (будучи воспроизведённой под отладчиком), хорошо поддаётся анализу. Просто смотрим список "застрявших" потоков, изучаем стек вызова каждого такого потока и определяем, какие объекты данный поток блокировал и какие пытается заблокировать. После чего надо только понять, как разрушить цикл.<br>
+<br>
+К сожалению, для поиска ошибок связанных с конкурентным доступом сложно дать какие-то рекомендации. Очевидно, что каждые разделяемые и изменяемые данные должны быть защищены от конкурентного доступа. Но как именно это сделать - решать программисту. Как обнаружить места, где это забыли сделать или сделали неправильно? Могу предложить только очень общий способ. Очевидно, что синхронизация имеет смысл только в том случае, если все потоки используют для синхронизации одни и те же объекты. Если поток П1 для обращения к объекту o блокировал объект m1, а поток П2 для обращения к тому же объекту о использует блокировку другого объекта m2, то ничего хорошего от такой "синхронизации" не получится. Поэтому можете попробовать для каждого совместно используемого объекта или переменной определить объект, который отвечает за синхронизацию доступа к нему. Если у вас получилось больше одного синхронизирующего объекта для какого-то совместно используемого элемента - то, скорее всего, тут ошибка. И ещё одна рекомендация по воспроизведению ошибок. Хотя, как мы уже говорили, даже на однопроцессорной машине поток может быть прерван в любой момент и поэтому возможно параллельное выполнение почти любых операторов (если только они не находятся в критической секции), на многопроцессорной машине вероятность этого значительно больше. Кроме того, тут так же сказывается параллелизм на уровне инструкций - инструкции, который могли рассматриваться как атомарные в однопроцессорной конфигурации, перестают быть такими в многопроцессорной системе. Поэтому постарайтесь прогнать свою программу на многопроцессорной системе - возможно гораздо быстрее наткнётесь на скрытые ошибки. Кроме того, при прогоне на многопроцессорной машине могут проявиться проблемы с падением производительности, вызванные конфликтами блокировок разных потоков. В этом случае придётся либо менять схему блокировок, либо изменять распределение данных между потоками, чтобы свести к минимуму использование глобальных (разделяемых) данных, доступ к которым требует синхронизации.<br>
+
+<h2>6. Проблема остановки.</h2>Как мы уже видели, запуск потока в Java не представляет собой проблемы – достаточно создать объект Thread и позвать метод start. Однако, оказывается, что, запустив поток на выполнение, его не так-то просто остановить. Хотя метод stop в классе Thread есть, но он помечен как deprecated (устаревший). Т.е. пользоваться им настоятельно не рекомендуется. И на то есть веские причины. Дело в том, что поток, остановленный в произвольный момент времени, может оставить в некорректном состоянии системные ресурсы. Например, если поток был владельцем каких либо блокировок, то эти объекты так и окажутся не разблокированными. Что же делать, если «убивать» поток нельзя? Надо заставить его совершить «харакири» - т.е. завершиться добровольно. Для этого в потоках, которые выполняют некоторое циклическое действие, в условие цикла надо поставить проверку того, что потоку не пора завершать работу. Например:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> MyThread <b>extends</b> <font color="darkblue"><b>Thread</b></font> {
+  <b>boolean</b> running <font color="red">=</font> <b>true</b>;
+
+  <b>public</b> <b>void</b> run() {
+    <b>while</b> (running) {
+      ... <font color="#2d807d">// делаем что-то</font>
+    }
+  }
+}</pre></td></tr></table></p><br>
+Однако обычно поток не только производит вычисления, но и совершает операции ввода/вывода. Соответственно очень часто поток блокирован в результате выполнения системного вызова, который не может быть выполнен мгновенно – например, read. Чтобы заставить такой поток закончить выполнение, надо воспользоваться методом interrupt() класса Thread. Если поток был блокирован во время выполнения метода Object.wait(), то в потоке будет инициирована исключительная ситуация InterruptedException. Если поток выполнял блокирующую операцию ввода/вывода, то выполнение операции будет прервано c помощью исключительной ситуации java.nio.channels.ClosedByInterruptException. При этом всё равно полезно использовать флаг остановки, чтобы отличать ситуацию, когда операция прервана в результате ошибки ввода/вывода и когда причина – остановка потока.<br>
+<br>
+Иногда в потоке стоит задержка выполнения на некоторое время. В классе Thread имеется метод Sleep, который "усыпляет" поток на заданное время в миллисекундах. Но если поток нужно будет останавливать, то более правильным представляется использование метода Object.wait с задержкой. В этом случае объекту можно послать уведомление, чтобы прервать его сон:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>class</b> MyThread <b>extends</b> <font color="darkblue"><b>Thread</b></font> {
+  <b>boolean</b>  running <font color="red">=</font> <b>true</b>;
+  <font color="darkblue"><b>Object</b></font> timer <font color="red">=</font> <b>new</b> <font color="darkblue"><b>Object</b></font>();
+
+  <b>static</b> <b>final</b> <b>int</b> DELAY=1000; <font color="#2d807d">// одна секунда</font>
+
+  <b>public</b> <b>void</b> run() {
+    <b>while</b> (running) {
+      ...  <font color="#2d807d">// делаем что-то</font>
+      <b>synchronized</b>(timer) {
+        <b>try</b> {
+          timer.wait(DELAY); <font color="#2d807d">// ждём заданное время,</font>
+          <font color="#2d807d">// либо сигнала о завершении</font>
+        } <b>catch</b> (<font color="darkblue"><b>InterruptedException</b></font> x) {}
+      }
+    }
+  }
+
+  <b>public</b> <b>void</b> terminate() {
+    <b>synchronized</b>(timer) {
+      running <font color="red">=</font> <b>false</b>; <font color="#2d807d">// устанавливаем флаг завершения</font>
+      timer.notify(); <font color="#2d807d">// и посылаем сигнал, чтобы пробудить спящий процесс.</font>
+    }
+  }
+}</pre></td></tr></table></p><br>
+Хотя поток и является более легковесным ресурсом, чем процесс (т.е. создание и переключение потоков требует меньше времени и памяти), но всё равно создание потока достаточно сложная операция, особенно в операционных системах, поддерживающих потоки на уровне ядра (а только в этом случае можно получить выигрыш от использования параллельных потоков на многопроцессорной машине). Поэтому, если программе необходимо периодически выполнять какие-то параллельные действия, неэффективно каждый раз создавать новый поток. Вместо этого лучше завести пул потоков. Идея очень проста: вместо того, чтобы каждый раз создавать новый поток, а потом его завершать, мы заводим некоторое число готовых потоков, которые ждут момента, когда они понадобятся. После выполнения работы поток не завершается, а опять попадает в список свободных потоков и ждёт следующего задания. Посмотрим, как это можно реализовать:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><font color="#2d807d">/**
+* Пул потоков
+*/</font>
+<b>public</b> <b>class</b> ThreadPool {
+  <font color="#2d807d">/**
+  * Получить экземпляр пула потоков
+  */</font>
+  <b>public</b> <b>static</b> ThreadPool getInstance() {
+    <b>return</b> theInstance;
+  }
+
+  <font color="#2d807d">/**
+  * Поток для повторного использования
+  */</font>
+  <b>static</b> <b>class</b> PooledThread <b>extends</b> <font color="darkblue"><b>Thread</b></font> {
+    PooledThread next;
+    <font color="darkblue"><b>Object</b></font>       ready; <font color="#2d807d">// объект, используемый для ожидания нового задания</font>
+    <font color="darkblue"><b>Object</b></font>       done;  <font color="#2d807d">// объект, используемый для сигнализации завершения работы</font>
+    <b>boolean</b>      busy; <font color="#2d807d">// флажок отмечающий, что поток занят</font>
+    <b>boolean</b>      doneNotificationNeeded; <font color="#2d807d">// ждёт ли кто-нибудь завершения работы</font>
+    <font color="darkblue"><b>Runnable</b></font>     task; <font color="#2d807d">// что нужно сделать</font>
+    ThreadPool   pool; <font color="#2d807d">// пул потоков</font>
+
+
+    <b>public</b> <b>void</b> run() {
+      <b>try</b> {
+        <b>synchronized</b>(ready) { <font color="#2d807d">// блокируем ready – готовимся к ожиданию работы</font>
+          <b>while</b> (!pool.closed) { <font color="#2d807d">// проверяем не закрыт ли пул</font>
+            <b>synchronized</b>(done) { <font color="#2d807d">// блокировка ready</font>
+              busy <font color="red">=</font> <b>false</b>;    <font color="#2d807d">// мы закончили работу начатую на предыдущей</font>
+              <font color="#2d807d">// итерации цикла</font>
+              <b>if</b> (doneNotificationNeeded) { <font color="#2d807d">// если кто-то ждёт завершения работы…</font>
+                done.notify();     <font color="#2d807d">// то пошлём уведомление, что мы её закончили</font>
+              }
+            }
+            ready.wait();              <font color="#2d807d">// ждём нового задания</font>
+            <b>if</b> (task <font color="red">!=</font> <b>null</b>) {        <font color="#2d807d">// если мы его получили…</font>
+              task.run();            <font color="#2d807d">// то выполняем</font>
+            } <b>else</b> {
+              <b>break</b>;                 <font color="#2d807d">// иначе завершаем работу</font>
+            }
+          }
+        }
+      } <b>catch</b> (<font color="darkblue"><b>InterruptedException</b></font> x) {}
+    }
+
+    <b>final</b> <b>void</b> wakeUp(<font color="darkblue"><b>Runnable</b></font> t) { <font color="#2d807d">// запустить задание на выполнение</font>
+      <b>synchronized</b>(ready) { <font color="#2d807d">// блокировать readу, чтобы можно было послать уведомление</font>
+        busy <font color="red">=</font> <b>true</b>; <font color="#2d807d">// установить флаг занятости</font>
+        doneNotificationNeeded <font color="red">=</font> <b>false</b>;
+        task <font color="red">=</font> t;
+        ready.notify(); <font color="#2d807d">// послать уведомление свободному потоку</font>
+      }
+    }
+
+    <b>final</b> <b>void</b> waitCompletion() <b>throws</b> <font color="darkblue"><b>InterruptedException</b></font> {
+      <b>synchronized</b>(done) { <font color="#2d807d">// блокировать done для ожидания</font>
+        <b>if</b> (busy) { <font color="#2d807d">// если задание ещё не завершилось…</font>
+          doneNotificationNeeded <font color="red">=</font> <b>true</b>; <font color="#2d807d">// то поставить флаг ожидания завершения</font>
+          done.wait(); <font color="#2d807d">// и подождать</font>
+        }
+      }
+    }
+
+    PooledThread(ThreadPool pool) {
+      this.pool <font color="red">=</font> pool;
+      ready <font color="red">=</font> <b>new</b> <font color="darkblue"><b>Object</b></font>();
+      done <font color="red">=</font> <b>new</b> <font color="darkblue"><b>Object</b></font>();
+      busy <font color="red">=</font> <b>true</b>;
+      setDaemon(<b>true</b>); <font color="#2d807d">// запускаем поток как демона, чтобы не ждать его завершения</font>
+      <font color="#2d807d">// при выходе из программы</font>
+      this.start();
+    }
+  }
+
+  <font color="#2d807d">/**
+  * Найти свободный поток и запустить в нём задание на выполнение
+  * @param task объект реализующий интерфейс Runnable,
+  * метод run которого будет выполнен потоком
+  * @return поток, выделенный для данного задания
+  * (его можно использовать только в методе ThreadPool.join)
+  */</font>
+  <b>public</b> <font color="darkblue"><b>Thread</b></font> start(<font color="darkblue"><b>Runnable</b></font> task)
+  {
+    PooledThread thread;
+    <b>synchronized</b> (<b>this</b>) { <font color="#2d807d">// для работы со списком нужна блокировка</font>
+      <b>while</b> (availableThreadList <font color="red">==</font> <b>null</b>) { <font color="#2d807d">// если список свободных потоков пуст</font>
+        <b>try</b> {
+          <b>if</b> (nActiveThreads <font color="red">==</font> maxThreads) { <font color="#2d807d">// и если достигнуто ограничение на</font>
+            <font color="#2d807d">// максимальное число потоков</font>
+            deficit += 1; <font color="#2d807d">// то отметить, что есть задачи, ждущие выполнения</font>
+            wait();  <font color="#2d807d">// и подождать пока какой-нибудь из потоков не освободится</font>
+          } <b>else</b> {
+            availableThreadList <font color="red">=</font> <b>new</b> PooledThread(<b>this</b>); <font color="#2d807d">// создать новый поток</font>
+            availableThreadList.waitCompletion(); <font color="#2d807d">// и дождаться момента,</font>
+            <font color="#2d807d">// когда он стартует и будет</font>
+            <font color="#2d807d">// готов к получению задания</font>
+          }
+        } <b>catch</b> (<font color="darkblue"><b>InterruptedException</b></font> x) {
+          <b>return</b> <b>null</b>;
+        }
+      }
+      thread <font color="red">=</font> availableThreadList; <font color="#2d807d">// взять поток из списка свободных</font>
+      availableThreadList <font color="red">=</font> thread.next;
+      nActiveThreads += 1; <font color="#2d807d">// увеличит счётчик активных потоков</font>
+    }
+    thread.wakeUp(task); <font color="#2d807d">// запустить задание на выполнение</font>
+    <b>return</b> thread;
+  }
+
+  <font color="#2d807d">/**
+  * Дождаться завершения задания. Поток при этом возвращается в список свободных
+  * @param thread поток, возвращённый методом ThreadPool.start
+  */</font>
+  <b>public</b> <b>void</b> join(<font color="darkblue"><b>Thread</b></font> thread) <b>throws</b> <font color="darkblue"><b>InterruptedException</b></font>
+  {
+    PooledThread t <font color="red">=</font> (PooledThread)thread;
+    t.waitCompletion(); <font color="#2d807d">// дождаться завершения задания</font>
+    <b>synchronized</b> (<b>this</b>) { <font color="#2d807d">// для работы со списком нужна блокировка</font>
+      t.next <font color="red">=</font> availableThreadList; <font color="#2d807d">// добавить поток в список свободных</font>
+      availableThreadList <font color="red">=</font> t;
+      nActiveThreads -= 1; <font color="#2d807d">// уменьшить значение счётчика активных потоков</font>
+      <b>if</b> (deficit <font color="red">></font> 0) { <font color="#2d807d">// если есть потоки ждущие уведомления…</font>
+        notify();  <font color="#2d807d">// то послать уведомление о том, что поток освободился</font>
+        deficit -= 1;
+      }
+    }
+  }
+
+  <font color="#2d807d">/**
+  * Закрытие пула потоков. Подождать окончания работы всех активных потоков и
+  * завершить  все свободные потоки
+  */</font>
+  <b>public</b> <b>synchronized</b> <b>void</b> close()
+  {
+    closed <font color="red">=</font> <b>true</b>; <font color="#2d807d">// ставим флаг прекращения работы</font>
+    <b>while</b> (nActiveThreads <font color="red">></font> 0) { <font color="#2d807d">// пока есть активные потоки</font>
+      <b>try</b> {
+        deficit += 1; <font color="#2d807d">// мы нуждаемся в уведомлении о завершении потока</font>
+        wait(); <font color="#2d807d">// ждём уведомления</font>
+      } <b>catch</b> (<font color="darkblue"><b>InterruptedException</b></font> x) {}
+    }
+    <b>while</b> (availableThreadList <font color="red">!=</font> <b>null</b>) { <font color="#2d807d">// пока список свободных потоков не пуст</font>
+      availableThreadList.wakeUp(<b>null</b>); <font color="#2d807d">// потоку запрос на завершение</font>
+      availableThreadList <font color="red">=</font> availableThreadList.next; <font color="#2d807d">//  и исключаем его из списка</font>
+    }
+  }
+
+  <font color="#2d807d">/**
+  * Конструктор пула потоков с ограничением на максимальное число активных потоков
+  * @param maxThreads максимальное число одновременно работающих потоков.
+  */</font>
+  <b>public</b> ThreadPool(<b>int</b> maxThreads) {
+    this.maxThreads <font color="red">=</font> maxThreads;
+  }
+
+  <font color="#2d807d">/**
+  * Конструктор пула потоков с неограниченным числом потоков
+  */</font>
+  <b>public</b> ThreadPool() {
+    <b>this</b>(Integer.MAX_VALUE);
+  }
+
+
+  PooledThread availableThreadList; <font color="#2d807d">// список свободных потоков</font>
+  <b>int</b>          nActiveThreads; <font color="#2d807d">// число активных потоков</font>
+  <b>int</b>          deficit; <font color="#2d807d">// количество потоков, заинтересованных в получении</font>
+  <font color="#2d807d">// уведомления о завершении работы</font>
+
+  <b>int</b>          maxThreads; <font color="#2d807d">// ограничение на максимальное число одновременно</font>
+  <font color="#2d807d">// работающих потоков</font>
+
+  <b>boolean</b>  closed; <font color="#2d807d">// флаг прекращения работы</font>
+
+  <b>static</b> ThreadPool theInstance <font color="red">=</font> <b>new</b> ThreadPool();
+}</pre></td></tr></table></p><br>
+Обратите внимание в этом примере на то, что уведомления посылаются не всегда, а только тогда, когда их кто-то ждёт. Подобная оптимизация с использованием дополнительной переменной позволяет избежать лишних вызовов notify.<br>
+
+<h2>7. Практические примеры использования потоков</h2>Рассмотрим использование потоков в реальных и достаточно простых приложениях. Я буду рассматривать примеры приложений под J2ME (Java для мобильных и встроенных устройств) по причине исключительной простоты MIDP интерфейса. Но способы работы с потоками в J2ME ничем не отличаются от других платформ Java.<br>
+<br>
+Итак, первый пример. Допустим, мы реализуем научный калькулятор, который должен уметь рисовать графики функций. Для этого мы должны вычислить значение функции во всех точках указанного интервала с заданным шагом. Их может быть довольно много, а вычисление функции (особенно на слабеньком процессоре мобильного телефона), может занимать много времени. С другой стороны, пока мы не вычислили значение функции для всех точек, мы не сможем определить максимум и минимум функции на этом интервале и вычислить коэффициент для вертикального масштабирования графика функции (чтобы график поместился на экран). Конечно, можно просто вывести на экран "Подождите минуточку..." и заняться вычислениями. Но это не очень хорошее решение:<br>
+
+<ul>
+	
+	<li>
+	Во-первых пользователь не может прервать процесс вычислений (допустим вам в это время звонят, а у вас телефон занят вычислениями). 
+	</li>
+	<li>
+	Во-вторых пользователь не знает сколько ещё времени ему осталось ждать (если бы он знал, что график будут построен только через час, он бы давно остановил работу и задал другой интервал или шаг). 
+	</li>
+</ul><br>
+Посмотрим, как это можно сделать. Ясно, что вычисление функции должно производится независимо от работы остальной программы. То есть нам нужен поток:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>import</b> javax.microedition.lcdui.*;
+<b>import</b> javax.microedition.midlet.*;
+
+<b>public</b> <b>class</b> Plot <b>extends</b> Form <b>implements</b> CommandListener, <font color="darkblue"><b>Runnable</b></font>
+{
+  Calculator calculator;
+  Gauge      progressIndicator; <font color="#2d807d">// "градусник"</font>
+  StringItem completed; <font color="#2d807d">// а сюда мы будем записывать строчку с процентом выполнения</font>
+  <font color="darkblue"><b>Float</b></font>      from; <font color="#2d807d">// начальная точка</font>
+  <font color="darkblue"><b>Float</b></font>      till; <font color="#2d807d">// конечная точка</font>
+  <font color="darkblue"><b>Float</b></font>      dx;   <font color="#2d807d">// шаг</font>
+  <font color="darkblue"><b>Float</b></font>[]    values; <font color="#2d807d">// сюда мы будем заносить вычисленные значения функции</font>
+  <b>int</b>        percent; <font color="#2d807d">// процент выполнения</font>
+  <font color="darkblue"><b>Thread</b></font>     thread;  <font color="#2d807d">// поток в котором будет всё делаться</font>
+  <b>boolean</b>    running; <font color="#2d807d">// флажок нужный для "аварийной" остановки потока</font>
+  Compiler.FunctionExpression f; <font color="#2d807d">// вычисляемая функция</font>
+
+  Plot(Calculator calculator, Compiler.PlotExpression expr, <b>int</b> screenWidth) {
+    <b>super</b>("<font color="blue">Plot</font>");
+    this.calculator <font color="red">=</font> calculator;
+
+    from <font color="red">=</font> expr.from.evaluate(calculator.bindings);
+    till <font color="red">=</font> expr.till.evaluate(calculator.bindings);
+    dx <font color="red">=</font> expr.step <font color="red">!=</font> <b>null</b>
+    <font color="red">?</font> expr.step.evaluate(calculator.bindings)
+    : till.Sub(from).Div(screenWidth);
+    f <font color="red">=</font> expr.f;
+
+    <b>int</b> n <font color="red">=</font> (<b>int</b>)till.Sub(from).Div(dx).toLong() <font color="red">+</font> 1;
+    <b>if</b> (n <font color="red"><</font> 2) {
+      calculator.showAlert(AlertType.ERROR, "<font color="blue">Error</font>", "<font color="blue">Bad interval</font>");
+      <b>return</b>;
+    }
+    values <font color="red">=</font> <b>new</b> <font color="darkblue"><b>Float</b></font>[n];
+    i <font color="red">=</font> 0;
+    x <font color="red">=</font> from;
+    progressIndicator <font color="red">=</font> <b>new</b> Gauge("<font color="blue">Progress indicator</font>", <b>false</b>, n, 0);
+    completed <font color="red">=</font> <b>new</b> StringItem("<font color="blue">Completed:</font>", "<font color="blue">0%</font>");
+    append(progressIndicator);
+    append(completed);
+
+    setCommandListener(<b>this</b>);
+    addCommand(Calculator.STOP_CMD);
+    Display.getDisplay(calculator).setCurrent(<b>this</b>);
+
+    running <font color="red">=</font> <b>true</b>;
+    thread <font color="red">=</font> <b>new</b> <font color="darkblue"><b>Thread</b></font>(<b>this</b>);
+    thread.start(); <font color="#2d807d">// запускаем</font>
+  }
+
+  <b>public</b> <b>void</b> run() {
+    <b>try</b> {
+      <font color="darkblue"><b>Float</b></font> x <font color="red">=</font> from;
+      <font color="#2d807d">// проверяем флажок running, чтобы остановить работу потока при выполнении команды STOP</font>
+      <b>for</b> (<b>int</b> i <font color="red">=</font> 0, n <font color="red">=</font> values.length; running <font color="red">&&</font> i <font color="red"><</font> n; i++) {
+        f.arguments[0] <font color="red">=</font> x;
+        <font color="#2d807d">// вычисляем значение функции в очередной точке</font>
+        values[i] <font color="red">=</font> f.evaluate(calculator.bindings);
+        <b>int</b> newPercent <font color="red">=</font> i*100/n;
+        <font color="#2d807d">// оптимизация: обновляем индикаторы прогресса только при изменении процента выполнения</font>
+        <b>if</b> (newPercent <font color="red">!=</font> percent) {
+          progressIndicator.setValue(i);
+          percent <font color="red">=</font> newPercent;
+          completed.setText(Integer.toString(newPercent) <font color="red">+</font> '<font color="blue">%</font>');
+        }
+        x <font color="red">=</font> x.Add(dx);
+      }
+    } <b>catch</b> (CompileError x) {
+      calculator.showAlert(AlertType.ERROR, "<font color="blue">Error</font>", x.getMessage());
+      <b>return</b>;
+    }
+    <b>if</b> (running) {
+      <font color="#2d807d">// рисуем график, только если не была выполнена команда Stop</font>
+      <b>new</b> Graph(calculator, from, till, values);
+    }
+  }
+
+  <b>public</b> <b>void</b> commandAction(Command c, Displayable d) {
+    <b>if</b> (c <font color="red">==</font> Calculator.STOP_CMD) {
+      <font color="#2d807d">// устанавливаем флажок для завершения потока</font>
+      running <font color="red">=</font> <b>false</b>;
+      Display.getDisplay(calculator).setCurrent(calculator.mainMenu);
+    }
+  }
+}</pre></td></tr></table></p><br>
+Теперь рассмотрим пример написания простейшей игрушки. Допустим, у нас должен кто-то (для определённости назовём его НЛО) перемещаться по экрану с заданной скоростью. Рисование в MIDP выполняется в переопределённом методе paint(Graphics g) класса Canvas. Чтобы инициировать его выполнения нужно с помощью метода repaint попросить систему перерисовать какую-то область экрана (или весь экран). Т.е. если у нас НЛО ползёт по экрану, нужно попросить перерисовать прямоугольник, в котором находится НЛО. Дальше мы стираем старый образ НЛО, вычисляем его новые координаты и рисуем его на новом месте. Осталась самая малость - кто-то должен периодически (с периодом определяемым скоростью движения НЛО) вызывать метод repaint. Можно конечно для этого завести поток, но к счастью есть и более простое решение - использовать класс Timer:<br>
+<br clear="all"><p><table width="100%" cellspacing="0" cellpadding="4" border="0"><tr><td bgcolor="#f0f0f0"><pre><b>import</b> javax.microedition.lcdui.*;
+<b>import</b> java.util.Timer;
+<b>import</b> java.util.TimerTask;
+
+
+<b>public</b> <b>class</b> GameCanvas <b>extends</b> <font color="darkblue"><b>Canvas</b></font> <b>implements</b> CommandListener {
+  <b>class</b> GameTask <b>extends</b> TimerTask {
+    <b>public</b> <b>void</b> run() {
+      repaint(); <font color="#2d807d">// запрос на перерисовку</font>
+    }
+  }
+
+  GameCanvas(Game game) {
+    <font color="#2d807d">// вычисляем интервал перерисовки (скорость движения НЛО) в зависимости от уровня</font>
+    delay <font color="red">=</font> MAX_DELAY <font color="red">-</font> game.settings.level*MAX_DELAY/Settings.LEVELS;
+    <font color="#2d807d">// создаём таймер</font>
+    timer <font color="red">=</font> <b>new</b> <font color="darkblue"><b>Timer</b></font>();
+    <font color="#2d807d">// и объект котрый будет запускаться таймером</font>
+    task <font color="red">=</font> <b>new</b> GameTask();
+    ...
+  }
+
+  <font color="#2d807d">// запустить игру</font>
+  <b>void</b> start() {
+    <font color="#2d807d">// запускаем таймер (с нулевой задержкой и заданным интервалом в миллисекундах)</font>
+    timer.schedule(task, 0, delay);
+  }
+
+  <font color="#2d807d">//  приостановить игру</font>
+  <b>void</b> stop() {
+    <font color="#2d807d">// остановить таймер</font>
+    timer.cancel();
+  }
+  ...
+
+  <b>static</b> <b>final</b> <b>long</b> MAX_DELAY <font color="red">=</font> 1000;
+
+  GameTask task;
+  <font color="darkblue"><b>Timer</b></font>    timer;
+  <b>long</b>     delay;
+}</pre></td></tr></table></p><br>
+Следует заметить, что внутри таймер реализован с помощью потока, который осуществляет задержку с помощью метода wait(long delay).<br>
+<br>
+
+<h2>Заключение</h2>Возможно, после прочтения главы 5 у вас возникло чувство, что многопоточность это очень сложная и опасная штука, поэтому её лучше не использовать. Это не так. Создание параллельных программ действительно сложная задача, но, похоже, без этого сейчас просто не возможно обойтись. И не всё так плохо. Серьёзные проблемы с управлением потоками возникают в основном в сложных приложениях (обычно сёрверных), где для достижения максимальной производительности и маштабируемости приходится бороться за максимальное распараллеливание этапов выполнения запросов. Если вам в вашем приложении просто нужно выполнить некоторое действие в фоновом режиме, то, возможно, вы и не встретитесь ни с одной из описанных мной проблем. Но будьте бдительны: ошибки в синхронизации – самые коварные.<br>
+<br>
+
+
+<br clear="all"><table width="46" align="left" border="0" cellspacing="0" cellpadding="4">
+<tr>
+<td>
+   
+   
+   <a target="" href="/contest/archive">
+   <img src="/ezimagecatalogue/catalogue/attnduWZW.gif" border="0" width="46" height="33" alt="" />
+   </a>   
+   
+</td>
+</tr>
+
+</table><br>
+<br>
+
+
+<form action="/form/form/process/2/1/" method="post">
+<h2>Мнение читателя</h2>
+
+<a href="http://lib.juga.ru/contest/rules">Инструкции</a>
+<input type="hidden" name="formID" value="2" />
+<input type="hidden" name="mailSubject" value="Мнение читателя" />
+<input type="hidden" name="redirectTo" value="http://lib.juga.ru/contest" />
+
+<p class="boxtext">Электронный адрес отправителя:</p>
+<input type="text" class="box" name="formSender" value="" />
+<br /><br />
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+
+	<td  colspan="1" >
+	<p class="boxtext">
+	Качество:
+	</p>
+	
+<select name="eZFormElement_8">
+
+<option value="- Ваша оценка -">- Ваша оценка -</option>
+<option value="5 - отлично">5 - отлично</option>
+<option value="4 - хорошо">4 - хорошо</option>
+<option value="3 - удовлетворительно">3 - удовлетворительно</option>
+<option value="2 - не удовлетворительно">2 - не удовлетворительно</option>
+<option value="1 - откровенно слабо">1 - откровенно слабо</option>
+</select><br /><br />
+	</td>
+
+</tr>
+<tr>
+
+	<td  colspan="1" >
+	<p class="boxtext">
+	Полезность:
+	</p>
+	
+<select name="eZFormElement_9">
+
+<option value="- Ваша оценка -">- Ваша оценка -</option>
+<option value="5 - отлично">5 - отлично</option>
+<option value="4 - хорошо">4 - хорошо</option>
+<option value="3 - удовлетворительно">3 - удовлетворительно</option>
+<option value="2 - не удовлетворительно">2 - не удовлетворительно</option>
+<option value="1 - откровенно слабо">1 - откровенно слабо</option>
+</select><br /><br />
+	</td>
+
+</tr>
+<tr>
+
+	<td  colspan="1" >
+	<p class="boxtext">
+	Краткий коментарий:
+	</p>
+	
+<textarea class="box" name="eZFormElement_10" cols="40" rows="5" wrap="soft"></textarea><br /><br />
+	</td>
+
+</tr>
+<tr>
+
+</tr>
+</table>
+
+
+<table cellspacing="0" cellpadding="0" border="0">
+<tr>
+	<td valign="top">
+	<input class="okbutton" type="submit" name="OK" value="OK" />
+	</td>
+</tr>
+</table>
+
+
+</form>
+
+	</td>
+</tr>
+</table>
+
+<br clear="all" />
+
+
+
+
+
+
+
+
+
+<br clear="all" />
+<form method="post" action="/article/mailtofriend/166/1/68/">
+
+<p class="boxtext">E-mail получателей:</p>
+<input type="text" class="box" size="40" name="SendTo" value="" />
+<br /><br />
+
+<p class="boxtext">Ваш E-mail:</p>
+<input type="text" class="box" size="40" name="From" value="">
+<br /><br />
+
+<input class="stdbutton" type="submit" value="Отправить">
+
+</form>
+
+<br clear="all" />
+
+<div align="center">
+
+
+
+
+
+
+
+
+<br /><br />
+
+
+
+
+| <a class="path" href="/article/articleprint/166/-1/68/">Версия для печати</a>
+
+| <a class="path" href="/article/mailtofriend/166/1/68/">Отправить эту статью другу</a> |
+
+</div>
+
+<!-- Main content view end -->
+      </td>
+      <td><img src="/i/0.gif" width="3" height="1" border="0" /></td>
+
+      <td bgcolor="#A8B0BF" height="100%"><table  border="0" cellpadding="0" cellspacing="0" height="100%" bgcolor="white">
+		<tr valign="top">
+		<td width="1%" bgcolor="#ffffff">
+
+    <!-- Right menu start -->
+
+    
+    
+    <form method="post" action="/poll/userlogin/vote/10/">
+<table border="0" cellpadding="0" cellspacing="0" align="right">
+
+                     <tr><td colspan="2"><img src="/i/0.gif" width="1" height="18" border="0" /></td></tr>
+         <tr>
+            <td class="menuhead">Опрос</td>
+            <td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+         </tr>
+         <tr>
+            <td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+            <td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+
+         </tr>
+       </table>
+		 <br>
+		 <br>
+<table width="100%" cellspacing="0" cellpadding="3" border="0">
+<tr>
+	<td colspan="2" class="menutext">
+<br />
+	Ваше отношение к JSF (Java Server Faces)
+	</td>
+</tr>
+
+<tr>
+	<td width="1%">
+	<input type="radio" value="51" name="ChoiceID">
+	</td>
+	<td class="menutext" width="99%">
+	Использую
+	</td>
+</tr>
+<tr>
+	<td width="1%">
+	<input type="radio" value="52" name="ChoiceID">
+	</td>
+	<td class="menutext" width="99%">
+	Не использую
+	</td>
+</tr>
+<tr>
+	<td width="1%">
+	<input type="radio" value="53" name="ChoiceID">
+	</td>
+	<td class="menutext" width="99%">
+	Планирую использовать
+	</td>
+</tr>
+<tr>
+	<td width="1%">
+	<input type="radio" value="54" name="ChoiceID">
+	</td>
+	<td class="menutext" width="99%">
+	Не планирую использовать
+	</td>
+</tr>
+<tr>
+	<td width="1%">
+	<input type="radio" value="55" name="ChoiceID">
+	</td>
+	<td class="menutext" width="99%">
+	А что это?
+	</td>
+</tr>
+
+
+
+<tr>
+	<td colspan="2" align="center">
+	<input type="hidden" name="PollID" value="10" />
+	<input type="submit" value="Отправить" />
+	</td>
+</tr>
+</table>
+
+<table width="100%" cellspacing="0" cellpadding="2" border="0">
+<tr>
+	<td width="99%"><a class="menuitem" href="/poll/result/10">Результаты</a></td>
+</tr>
+<tr>
+	<td width="99%"><a class="menuitem" href="/poll/polls">Другие опросы</a></td>
+</tr>
+</table>
+
+</form>
+
+<table  border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="white">
+<tr><td bgcolor="white"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+<tr><td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+</table>
+
+	 <br />
+		   <div align="center">
+			<a class="path" href="?PrintableVersion=enabled"><img src="/images/print_printer.gif" border="0"></a><br />
+			<a class="path" href="?PrintableVersion=enabled">Версия для печати</a>
+			</div>
+	 <br />
+	 <div align="center">
+	 <a href="/article/rssheadlines"><img src="/images/xml.png" border="0"></a>
+	 </div>
+<table  border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="white">
+<tr><td bgcolor="white"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+<tr><td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td></tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%">
+                  <tr><td><table border="0" cellpadding="0" cellspacing="0" align="right">
+							<tr><td colspan="2"><img src="/i/0.gif" width="1" height="6" border="0" /></td></tr>
+                     <tr>
+                        <td class="menuhead">Реклама</td>
+                        <td width="99%"><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+                     </tr>
+                     <tr>
+                        <td bgcolor="#A8B0BF"><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+                        <td><img src="/i/0.gif" width="1" height="1" border="0" /></td>
+                     </tr>
+                  </table></td></tr>
+                  <tr><td><img src="/i/0.gif" width="1" height="15" border="0" /></td></tr>
+
+                  <tr><td align="center">
+<div align="center">
+<script language='JavaScript' type='text/javascript'>
+<!--
+   if (!document.phpAds_used) document.phpAds_used = ',';
+   phpAds_random = new String (Math.random()); phpAds_random = phpAds_random.substring(2,11);
+   
+   document.write ("<" + "script language='JavaScript' type='text/javascript' src='");
+   document.write ("http://ads.i-rs.ru/adjs.php?n=" + phpAds_random);
+   document.write ("&amp;what=zone:3");
+   document.write ("&amp;exclude=" + document.phpAds_used);
+   if (document.referer)
+      document.write ("&amp;referer=" + escape(document.referer));
+   document.write ("'><" + "/script>");
+//-->
+</script><noscript><a href='http://ads.i-rs.ru/adclick.php?n=af7f0010' target='_blank'><img src='http://ads.i-rs.ru/adview.php?what=zone:3&amp;n=af7f0010' border='0' alt=''></a></noscript>
+</div>
+						</tr>
+               </table>
+
+<!-- Right menu end -->
+
+   <img src="/images/1x1.gif" width="144" height="20" border="0" alt="" /><br />
+
+
+
+
+   </td>
+</tr>
+      </table></td>
+
+   </tr>
+</table>
+
+
+
+
+
+
+<!-- spacer -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+	</tr>
+</table>
+<!-- /spacer -->
+
+<!-- copyright -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#292A33">
+	<tr>
+		<td class="copy">Copyright &copy; <a class="copy" href="http://about.juga.ru/feedback">JUGA.RU</a></td>
+	</tr>
+</table>
+
+<!-- /copyright -->
+
+<!-- spacer -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr>
+		<td><img src="/i/0.gif" width="1" height="3" border="0" /></td>
+	</tr>
+</table>
+<!-- /spacer -->
+
+<!-- banner -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" bgcolor="#609FBF">
+	<tr>
+		<td align="center" width="150"><img src="/i/0.gif" width="150" height="1" border="0" /><br />
+		<!--Rating@Mail.ru COUNTER--><script language="JavaScript"><!--
+d=document;a='';a+=';r='+escape(d.referrer)
+js=10//--></script><script language="JavaScript1.1"><!--
+a+=';j='+navigator.javaEnabled()
+js=11//--></script><script language="JavaScript1.2"><!--
+s=screen;a+=';s='+s.width+'*'+s.height
+a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth)
+js=12//--></script><script language="JavaScript1.3"><!--
+js=13//--></script><script language="JavaScript"><!--
+d.write('<a href="http://top.mail.ru/jump?from=544009"'+
+' target=_top><img src="http://top.list.ru/counter'+
+'?id=544009;t=211;js='+js+a+';rand='+Math.random()+
+'" alt="Рейтинг@Mail.ru"'+' border=0 height=31 width=88></a>')
+if(js>11)d.write('<'+'!-- ')//--></script><noscript><a
+target=_top href="http://top.mail.ru/jump?from=544009"><img
+src="http://top.list.ru/counter?js=na;id=544009;t=211"
+border=0 height=31 width=88
+alt="Рейтинг@Mail.ru"></a></noscript><script language="JavaScript"><!--
+if(js>11)d.write('--'+'>')//--></script><!--/COUNTER-->
+<br />
+<!--begin of Top100 logo-->
+<a href="http://top100.rambler.ru/top100/"><img src="http://top100-images.rambler.ru/top100/w2.gif" alt="Rambler's Top100" width=88 height=31 border=0></a>
+<br />
+<!--end of Top100 logo -->
+<!--begin of Rambler's Top100 code -->
+<img src="http://counter.rambler.ru/top100.cnt?466898" alt="" width=1 height=1 border=0>
+<!--end of Top100 code-->
+</td>
+		<td align="center" bgcolor="white"><img src="/i/0.gif" width="3" height="70" border="0" /></td>
+		<td align="center" width="90%"><script language='JavaScript' type='text/javascript'>
+<!--
+   if (!document.phpAds_used) document.phpAds_used = ',';
+   phpAds_random = new String (Math.random()); phpAds_random = phpAds_random.substring(2,11);
+   
+   document.write ("<" + "script language='JavaScript' type='text/javascript' src='");
+   document.write ("http://ads.i-rs.ru/adjs.php?n=" + phpAds_random);
+   document.write ("&amp;what=zone:2");
+   document.write ("&amp;exclude=" + document.phpAds_used);
+   if (document.referer)
+      document.write ("&amp;referer=" + escape(document.referer));
+   document.write ("'><" + "/script>");
+//-->
+</script><noscript><a href='http://ads.i-rs.ru/adclick.php?n=a947f759' target='_blank'><img src='http://ads.i-rs.ru/adview.php?what=zone:2&amp;n=a947f759' border='0' alt=''></a></noscript>
+</td>
+		<td align="center" bgcolor="white"><img src="/i/0.gif" width="3" height="1" border="0" /></td>
+		<td align="center"><img src="/i/0.gif" width="150" height="1" border="0" />
+		<a href="http://servlet.java.sun.com/jugs/europe/rus/moscow/13448.jsp" class="stats">Java User Group Alliance (Russia)</a><br />
+		<a href="http://www.i-rs.ru/"><img src="http://www.juga.ru/i/i-rs-power.gif" border="0" width="88" height="31" vspace="3" /></a>
+		<br/>
+		</td>
+	</tr>
+</table>
+<!-- /banner -->
+
+</body>
+</html>

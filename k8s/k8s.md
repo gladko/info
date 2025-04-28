@@ -1,0 +1,42 @@
+Terms:
+- Kubernetes
+- containerd is container runtime
+- CRI-O
+- docker
+- etcd
+- Kubernetes API is exposed by Control Plane
+- Minikube is a lightweight Kubernetes implementation for local machine
+- kind lets you run Kubernetes on your local computer. Similar to Minikube
+- kubectl is Kubernetes command-line tool
+- kubeadm ia a tool to create and manage Kubernetes clusters
+
+
+
+A Kubernetes cluster consists of two types of resources:
+- The `Master node` or `Control Plane` coordinates the cluster
+- `Nodes` are the workers that run applications
+
+ Worker machine (`node`) in k8s cluster has:
+ - container runtime  (containerd or CRI-O)
+ - `kubelet` is an agent for managing the node and communicating with the Kubernetes control plane.
+ - kube proxy
+
+Master node contains:
+- API server:  cluster gateway
+- Scheduler: starts/stops nodes and pods. Distributes pods over nodes
+- Controller manager: detects cluster state changes. Reschedules pods if any dies
+- etcd: cluster state storage
+
+
+
+K8s components
+- Node: worker node. Physical or virtual machine
+- Pod: smalest unit of k8s. Abstraction over container
+- Service: permanent IP address. Kind of facade for pods
+- Ingress: proxy for external incoming requests
+- ConfigMap: external config of application
+- Secrets: config-map for secret data
+- Volumes: permanent storage
+- StatefulSet
+- Deployment: blueprint for my-app pods
+

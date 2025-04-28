@@ -45,7 +45,8 @@ ps -ef | grep repeater                      процесс репиттера
         NET  STAT  -   LINUX
 //////////////////////////////////////////////////////////////
 netstat -tpln | grep 7002                    check port usage (win)
-
+ip a
+ss -nutlp               socket stat
 
 
 

@@ -8,49 +8,45 @@ echo $SHELL
  ## DOWNLOAD & UPLOAD   
 scp user@remote_host_name:/file_path local_path_to		# download file from a remote machine
 
-scp file_name user@remote_host_name:/path_to			# upload file to a remote machine
-scp data.txt user@taito.csc.fi:							# upload file to home dir
-scp -r data_dir user@taito.csc.fi:						# upload directory
+scp file_name user@remote_host_name:/path_to		    	# upload file to a remote machine
+scp data.txt user@taito.csc.fi:							          # upload file to home dir
+scp -r data_dir user@taito.csc.fi:						        # upload directory
 
 
 
 ## STAT & ENV
-hostname 									computer name
+hostname 									      computer name
 cat /etc/os-release							OS info
-hostnamectl									OS info
+hostnamectl									    OS info
 
-  ### environment
+ ### environment
 printenv									
 printenv | grep VAR_NAME
 echo $VAR_NAME
-set PROP_NAME								prints env variable
+set PROP_NAME								    prints env variable
 set PROP_NAME=VALUE
 
-df -h										free space on disk
+df -h										        free space on disk
+
+ps -ef | grep <PROCESS_NAME>    find process  
 
 
-| descr           |     linux        |     mac        |
-| --------------- | ---------------- | -------------- |
-| who uses file   |                  | lsof +D <path> |
-
-                                     
-ps -ef | grep <PROCESS_NAME>      find process  
-
-
- ## NET  STAT  -   LINUX
-netstat -tpln | grep 7002             check port usage (win)
+ ###  LINUX
+netstat -tpln | grep 7002                   check port usage (win)
 ip a
-ss -nutlp                             socket stat
+ss -nutlp                                   socket stat
+---------------------------------------------------------------------------------------
 
+ ###  MAC
+nc -vz <HOST_NAME> 7004                     check port usage (mac)
 
- ## NET  STAT  -    MAC
-nc -vz <HOST_NAME> 7004                          check port usage (mac)
+lsof -nP -iTCP:<PORT> | grep LISTEN         print used ports (macOS)
+lsof -i -P | grep LISTEN                    who uses port (mac)
 
-lsof -nP -iTCP:<SOME_PORT> | grep LISTEN         print used ports (macOS)
-lsof -i -P | grep LISTEN                         who uses port (mac)
+lsof -i -P -a -p <PID>                      Find ports used by a specific process
 
-lsof -i -P -a -p <PID>                           Find ports used by a specific process
-
+lsof +D <path>                              who uses file
+---------------------------------------------------------------------------------------
 
 networksetup -listallhardwareports               list all network interfaces       
 sudo tcpdump -i en0

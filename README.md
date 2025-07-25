@@ -1,5 +1,5 @@
 # info
-This repo contains some my programming experience and observations
+Here I collect programming related materials that interest me.
 
 
 # todo
@@ -7,7 +7,5 @@ This repo contains some my programming experience and observations
 - overview spring boot & cloud technologies
 - docker & virtualization
 - kubernetes & orckestration
-- study python
-- kotlin
 - linux monitoring features: perf, eBPF
 - overview & try & compare web servers: nginx vs httpd vs tomcat

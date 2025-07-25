@@ -1,4 +1,5 @@
-# мониторинг
+
+?:P_;o9]# мониторинг
 http://www.ibm.com/developerworks/ru/library/j-rtm1/index.html
 http://www.ibm.com/developerworks/ru/library/j-rtm2/index.html
 http://www.ibm.com/developerworks/ru/library/l-jvmbytecode_mdf_1/

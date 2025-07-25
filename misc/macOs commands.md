@@ -1,13 +1,15 @@
 ## Common macOS Commands
 Below are some common macOS commands, organized by general function. Bookmark this page so you can refer back to it often. Although most options to these commands are identical between Linux and macOS, be sure to view the manual page for commands that you will use in the future.
 
-###System Documentation Commands in macOS
+### System Documentation Commands in macOS
 man Displays/searches the manual page database
 apropos Searches the manual page database by keyword
 info Displays/searches the info page database
 help Displays help on BASH functions
 
-###File Management Commands in macOS
+
+### File Management Commands in macOS
+
 pwd Displays the current directory
 cd Changes the current directory
 ls Lists files
@@ -38,9 +40,9 @@ grep Searches text files for regular expressions
 egrep Searches text files for regular expressions (including extended ones)
 sed Edits text files using search-and-replace functions
 awk Edits and formats text using predefined functions
-·vi (vim) The vi text editor (common to all UNIX systems)
+·  vi (vim) The vi text editor (common to all UNIX systems)
 emacs The GNU Emacs text editor
-·nano A small easy-to-use text editor based on the UNIX pico editor
+· nano A small easy-to-use text editor based on the UNIX pico editor
 
 
 ### Filesystem Administration in macOS

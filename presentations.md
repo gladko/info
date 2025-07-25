@@ -1,6 +1,6 @@
 # JVM
-https://www.youtube.com/watch?v=0pyZERLBZvQ#t=3440.100917
-Андрей Паньгин — Всё, что вы хотели знать о стек-трейсах и хип-дампах
+[Андрей Паньгин — Всё, что вы хотели знать о стек-трейсах и хип-дампах](https://www.youtube.com/watch?v=0pyZERLBZvQ#t=3440.100917)
+
 
 https://www.youtube.com/watch?v=Svc0WtfV63k
 Андрей Паньгин — Java Runtime: повседневные обязанности виртуальной машины Java
@@ -97,17 +97,14 @@ https://www.youtube.com/watch?v=wm2JNlaJJ5k
 
 
 # GC
-http://profyclub.ru/docs/305
-Алексей Рагозин - Секреты сборки мусора в Java
+[Алексей Рагозин - Секреты сборки мусора в Java](http://profyclub.ru/docs/305)
 
-https://www.youtube.com/watch?v=Sz356YoNHZg
-Алексей Рагозин — Сборка мусора, битва алгоритмов
+[Алексей Рагозин — Сборка мусора, битва алгоритмов](https://www.youtube.com/watch?v=Sz356YoNHZg)
 
-https://habrahabr.ru/company/getintent/blog/302910/
-Выбор и настройка Garbage Collector для Highload системы в Hotspot JVM
+[Выбор и настройка Garbage Collector для Highload системы в Hotspot JVM](https://habrahabr.ru/company/getintent/blog/302910)
 
-https://www.youtube.com/watch?v=3UP0o2gkeRQ&list=PLVe-2wcL84b_xDvw7rO_qlw7OcllbHsIN&index=18
-Никита Сальников-Тарновский — Где моя память, чувак?!
+[Никита Сальников-Тарновский — Где моя память, чувак?!](https://www.youtube.com/watch?v=3UP0o2gkeRQ&list=PLVe-2wcL84b_xDvw7rO_qlw7OcllbHsIN&index=18)
+
 
 
 https://www.youtube.com/watch?v=rZclumzMEGs&list=PLVe-2wcL84b-izaJuCD9VhEQeHCtOxp0C&index=36

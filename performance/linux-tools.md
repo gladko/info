@@ -47,7 +47,7 @@ jhsdb jmap --exe <JAVA_HOME>/bin/java --core <CORE_DUMP> --histo
 ## Disk
 
 - **iostat**  
-```
+```bash
 : ~> iostat -xm 5
 Linux 3.10.0-1160.71.1.el7.x86_64 (h0001066) 	08/17/2022 	_x86_64_	(4 CPU)
 
@@ -69,7 +69,7 @@ dm-6              0.00     0.00    0.00    0.00     0.00     0.00     8.62     0
 
 
 - **dd**   -  disk write speed test
-```
+```bash
 $ dd if=/dev/zero of=/tmp/test1.img bs=1G count=1 oflag=dsync
 1+0 records in
 1+0 records out

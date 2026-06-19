@@ -45,7 +45,7 @@ https://superuser.com/questions/1110974/how-to-access-linux-ubuntu-files-from-wi
 `cd \\wsl$\Ubuntu\home\`
 
 
-прокинуть порт из wsl
+## прокинуть порт из wsl
 ```powershel
   netsh interface portproxy add v4tov4 listenport=6443 listenaddress=0.0.0.0 connectport=6443 connectaddress=172.17.244.18
 ```

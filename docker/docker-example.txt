@@ -4,12 +4,6 @@
 see	https://docs.docker.com/get-started/part2/
 
 
-
-
-sudo su -
-
-
-
 docker build --tag=vk-sam .				# Builds image
 docker run -d -p 8085:80 vk-sam				# Starts image
 docker rmi -f vk.sam					# Remove image
@@ -19,8 +13,6 @@ docker rmi -f vk.sam					# Remove image
 //////////////////////////////////////////////////////////
 in browser run to 	http://localhost:8085
 curl http://localhost:8085
-
-
 
 
 
